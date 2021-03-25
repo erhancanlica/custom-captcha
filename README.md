@@ -1,2 +1,2 @@
-# CAPTCHA README 
+# CAPTCHA 
 
