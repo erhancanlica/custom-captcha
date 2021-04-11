@@ -1,6 +1,5 @@
 package tr.edu.duzce.mf.bm470.captcha.config;
 
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -17,8 +16,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext applicationContext = getContext();
         servletContext.addListener(new ContextLoaderListener(applicationContext));
-        ServletRegistration.Dynamic dispatcherServlet =
-                                    servletContext.addServlet("DispatcherServlet", new DispatcherServlet(applicationContext));
+        ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(applicationContext));
         dispatcherServlet.setLoadOnStartup(1);
         dispatcherServlet.addMapping("/");
 
@@ -32,7 +30,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
     private AnnotationConfigWebApplicationContext getContext(){
         AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
-        applicationContext.setConfigLocation("tr.edu.duzce.mf.bm470.captcha.config;");
+        applicationContext.setConfigLocation("tr.edu.duzce.mf.bm470.captcha.config");
         return applicationContext;
     }
 
