@@ -8,6 +8,7 @@ import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import tr.edu.duzce.mf.bm470.captcha.security.SessionInterceptor;
 
 @Configuration
 @EnableWebMvc
@@ -32,8 +33,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResolver(new PathResourceResolver());
     }
 
-    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-        configurer.enable();
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new SessionInterceptor()).addPathPatterns(new String[]{"/admin/*", "/client/*"});
     }
 
     public void configureViewResolvers(ViewResolverRegistry registry) {

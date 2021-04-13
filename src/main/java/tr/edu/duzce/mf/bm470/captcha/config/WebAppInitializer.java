@@ -24,13 +24,12 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         dispatcherServlet.setLoadOnStartup(1);
         dispatcherServlet.addMapping("/");
-
+        dispatcherServlet.setInitParameter("throwExceptionIfNoHandlerFound", "true");
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
         servletContext.addFilter("characterEncodingFilter", characterEncodingFilter)
                                 .addMappingForUrlPatterns(null, false, "/*");
-
     }
 
     private AnnotationConfigWebApplicationContext getContext(){

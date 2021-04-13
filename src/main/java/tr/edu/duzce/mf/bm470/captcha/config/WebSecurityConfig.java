@@ -15,7 +15,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import tr.edu.duzce.mf.bm470.captcha.security.CustomSuccessHandler;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http
                 .authorizeRequests()
+                .antMatchers("/admin/*").hasAnyRole("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -46,7 +47,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(customSuccessHandler)
                 .failureUrl("/loginAdmin?error=true")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/loginAdmin?logout=true").permitAll();
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/loginAdmin?logout=true").permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/403");
     }
 
     @Bean
