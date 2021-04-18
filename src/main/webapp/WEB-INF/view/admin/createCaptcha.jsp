@@ -60,16 +60,16 @@
         <div class="page-breadcrumb">
             <div class="row">
                 <div class="col-5 align-self-center">
-                    <h4 class="page-title">Dashboard</h4>
+                    <h4 class="page-title">CAPTCHA EKLE</h4>
                 </div>
                 <div class="col-7 align-self-center">
                     <div class="d-flex align-items-center justify-content-end">
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item">
-                                    <a href="#">Home</a>
+                                    <a href="#">Anasayfa</a>
                                 </li>
-                                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                <li class="breadcrumb-item active" aria-current="page">Captcha Ekle</li>
                             </ol>
                         </nav>
                     </div>
@@ -93,23 +93,53 @@
             <!-- Table -->
             <!-- ============================================================== -->
             <div class="row">
-                <div class="col-lg-12">
-                    <h1>SEALMMSS</h1>
-                    <form:form action="fileUpload" method="post" enctype="multipart/form-data">
-                        <fieldset>
-                            <legend>Add a product</legend>
+                <div class="col-12">
+                    <div class="card">
+                        <form:form action="createCaptcha" modelAttribute="captcha" method="post" enctype="multipart/form-data">
+                            <div class="card-body">
+                                <div class="row m-auto">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label  class="control-label col-form-label">Captcha Ismi</label>
+                                            <input type="text" class="form-control" name="name" placeholder="Captcha ismi giriniz">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-form-label">Kategori</label>
+                                            <input type="text" class="form-control" name="kategori" placeholder="Kategori giriniz">
+                                        </div>
+                                    </div>
 
-                            <p>
-                                <label for="image">Product Images: </label>
-                                <input id="image" type="file" name="files" multiple="multiple"/>
-                            </p>
-                            <p id="buttons">
-                                <input id="reset" type="reset" tabindex="4">
-                                <input type="hidden" name="X-CSRF-TOKEN" value="${_csrf.token}"/>
-                                <input id="submit" type="submit" tabindex="5" value="Kaydet">
-                            </p>
-                        </fieldset>
-                    </form:form>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-form-label">Resmi Seç</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Yüklenen</span>
+                                                </div>
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" name="images" multiple="multiple">
+                                                    <label class="custom-file-label" data-navbarbg="images" >Buraya Tıkla!</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <hr>
+                            <div class="card-body">
+                                <div class="d-flex no-block align-items-center">
+                                    <div class="action-form">
+                                        <div class="form-group m-b-0 text-center">
+                                            <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
+                                            <button type="submit" class="btn btn-dark waves-effect waves-light">Cancel</button>
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form:form>
+                    </div>
                 </div>
             </div>
             <!-- ============================================================== -->

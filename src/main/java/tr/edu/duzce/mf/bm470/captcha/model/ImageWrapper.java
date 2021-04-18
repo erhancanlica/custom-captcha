@@ -17,10 +17,16 @@ public class ImageWrapper {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  long id;
 
+    @Column(name = "name")
     private String name;
 
     @Lob
+    @Column(name = "data")
     private byte[] data;
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "captchaId", nullable = false)
+    private Captcha captcha;
 
     @Transient
     private String base;

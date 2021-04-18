@@ -15,13 +15,13 @@
                 <li class="sidebar-item">
                     <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false">
                         <i class="mdi mdi-tune"></i>
-                        <span class="hide-menu">Yönetim Paneli </span>
+                        <span class="hide-menu">Admin Paneli</span>
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
-                            <a href="<c:url value="/admin/"/>" class="sidebar-link">
+                            <a href="<c:url value="/admin/createCaptcha"/>" class="sidebar-link">
                                 <i class="mdi mdi-view-quilt"></i>
-                                <span class="hide-menu">Captcha Ekle vsvs</span>
+                                <span class="hide-menu">Captcha Ekle </span>
                             </a>
                         </li>
 
