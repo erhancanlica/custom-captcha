@@ -52,7 +52,7 @@
                 <!-- Form -->
                 <div class="row">
                     <div class="col-12">
-                        <form class="form-horizontal m-t-20" action="login" method='POST'>
+                        <form class="form-horizontal m-t-20" action="/admin/process_login" method='POST'>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="ti-user"></i></span>

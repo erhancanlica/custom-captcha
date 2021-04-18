@@ -126,7 +126,7 @@
                                 <i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
                             <a class="dropdown-item" href="javascript:void(0)">
                                 <i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
-                            <a class="dropdown-item" href="<c:url value="/logout"/>">
+                            <a class="dropdown-item" href="<c:url value="/admin/logout"/>">
                                 <i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
                             <div class="dropdown-divider"></div>
                         </div>
