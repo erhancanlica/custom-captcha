@@ -25,7 +25,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext applicationContext = getContext();
-        applicationContext.register(WebSecurityConfig.class);
+        applicationContext.register(UserSecurityConfig.class,AdminSecurityConfig.class);
         ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(applicationContext));
         servletContext.addListener(new ContextLoaderListener(applicationContext));
         servletContext.addFilter("securityFilter", new DelegatingFilterProxy("springSecurityFilterChain"))

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,9 +15,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import tr.edu.duzce.mf.bm470.captcha.security.CustomSuccessHandler;
 
-@Configuration
 @EnableWebSecurity
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@Configuration
+@Order(2)
+public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     @Qualifier("customUserDetailsService")
@@ -25,29 +27,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomSuccessHandler customSuccessHandler;
 
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-
-
-        http
-                .csrf().disable()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/loginAdmin")
-                .loginProcessingUrl("/login")
-                .permitAll()
-                .successHandler(customSuccessHandler)
-                .failureUrl("/loginAdmin?error=true")
-                .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/loginAdmin?logout=true").permitAll();
     }
 
     @Bean
@@ -55,8 +42,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return authenticationManager();
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .antMatcher("/admin/**").authorizeRequests().anyRequest().hasRole("ADMIN")
+                .and()
+                .formLogin()
+                .loginPage("/loginAdmin")
+                .loginProcessingUrl("/admin/process_login")
+                .permitAll()
+                .successHandler(customSuccessHandler)
+                .failureUrl("/loginAdmin?error=true")
+                .and()
+                .logout()
+                .logoutUrl("/admin/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/admin/logout")).logoutSuccessUrl("/loginAdmin?logout=true").permitAll();
     }
 }
