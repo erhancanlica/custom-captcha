@@ -26,5 +26,18 @@ public class SessionController {
         return modelAndView;
     }
 
+    @GetMapping("/loginUser")
+    public ModelAndView loginUser(@RequestParam(value = "error", required = false) final String error,
+                              @RequestParam(value = "logout", required = false) final String logout){
+        ModelAndView modelAndView = new ModelAndView("loginUser");
+        if (nonNull(error)) {
+            modelAndView.addObject("error", "Kullanıcı adı veya şifre hatalı");
+        }
+        if (nonNull(logout)) {
+            modelAndView.addObject("msg", "Başarıyla çıkış yaptın");
+        }
+        return modelAndView;
+    }
+
 
 }

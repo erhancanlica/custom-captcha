@@ -36,8 +36,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http
+                .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin/*").hasAnyRole("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -47,9 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(customSuccessHandler)
                 .failureUrl("/loginAdmin?error=true")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/loginAdmin?logout=true").permitAll()
-                .and()
-                .exceptionHandling().accessDeniedPage("/403");
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/loginAdmin?logout=true").permitAll();
     }
 
     @Bean

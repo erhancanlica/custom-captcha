@@ -12,6 +12,7 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tr.edu.duzce.mf.bm470.captcha.model.Admins;
+import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
 import tr.edu.duzce.mf.bm470.captcha.model.Users;
 
 import java.util.Properties;
@@ -49,7 +50,7 @@ public class AppConfig {
         properties.put(C3P0_CONFIG_PREFIX + ".initialPoolSize", environment.getProperty("hibernate.c3p0.initialPoolSize"));
 
         factoryBean.setHibernateProperties(properties);
-        factoryBean.setAnnotatedClasses(Users.class, Admins.class);
+        factoryBean.setAnnotatedClasses(Users.class, Admins.class, ImageWrapper.class);
         return factoryBean;
     }
 

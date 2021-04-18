@@ -210,6 +210,12 @@
       <scope>runtime</scope>
     </dependency>
 
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.10</version>
+    </dependency>
+
 
     <!--javax.servlet-api-->
     <dependency>

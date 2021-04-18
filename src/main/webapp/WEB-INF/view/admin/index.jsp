@@ -4,7 +4,8 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
-
+    <meta name="_csrf" content="${_csrf.token}" />
+    <meta name="_csrf_header" content="${_csrf.headerName}" />
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -111,101 +112,9 @@
                                     </div>
                                 </div>
                                 <div class="table-responsive">
-                                    <table class="table no-wrap v-middle">
-                                        <thead>
-                                            <tr>
-                                                <th class="border-0 text-muted">Team Lead</th>
-                                                <th class="border-0 text-muted">Project</th>
-                                                <th class="border-0 text-muted">Team</th>
-                                                <th class="border-0 text-muted text-center">Status</th>
-                                                <th class="border-0 text-muted text-center">Weeks</th>
-                                                <th class="border-0 text-muted text-center">Budget</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex no-block align-items-center">
-                                                        <div class="m-r-10"><img src="../../assets/images/users/d1.jpg" alt="user" class="rounded-circle" width="45" /></div>
-                                                        <div class="">
-                                                            <h5 class="m-b-0 font-16 font-medium">BBaşşşköööy Gover</h5><span class="text-muted">hgover@gmail.com</span></div>
-                                                    </div>
-                                                </td>
-                                                <td>Elite Admin</td>
-                                                <td>
-                                                    <div class="popover-icon">
-                                                        <a class="btn-circle btn btn-info" href="javascript:void(0)">SS</a>
-                                                        <a class="btn-circle btn btn-purple text-white popover-item" href="javascript:void(0)">DS</a>
-                                                        <a class="btn-circle btn btn-danger text-white popover-item" href="javascript:void(0)">RP</a>
-                                                        <a class="btn-circle btn btn-outline-secondary" href="javascript:void(0)">+</a>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center"><i class="fa fa-circle text-danger" data-toggle="tooltip" data-placement="top" title="In Progress"></i></td>
-                                                <td class="text-center">35</td>
-                                                <td class="font-medium text-center">$96K</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex no-block align-items-center">
-                                                        <div class="m-r-10"><img src="../../assets/images/users/d2.jpg" alt="user" class="rounded-circle" width="45" /></div>
-                                                        <div class="">
-                                                            <h5 class="m-b-0 font-16 font-medium">Daniel Kristeen</h5><span class="text-muted">Kristeen@gmail.com</span></div>
-                                                    </div>
-                                                </td>
-                                                <td>Real Homes WP Theme</td>
-                                                <td>
-                                                    <div class="popover-icon">
-                                                        <a class="btn-circle btn btn-info" href="javascript:void(0)">SS</a>
-                                                        <a class="btn-circle btn btn-primary text-white popover-item" href="javascript:void(0)">DS</a>
-                                                        <a class="btn-circle btn btn-outline-secondary" href="javascript:void(0)">+</a>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center"><i class="fa fa-circle text-success" data-toggle="tooltip" data-placement="top" title="Active"></i></td>
-                                                <td class="text-center">35</td>
-                                                <td class="font-medium text-center">$96K</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex no-block align-items-center">
-                                                        <div class="m-r-10"><img src="../../assets/images/users/d3.jpg" alt="user" class="rounded-circle" width="45" /></div>
-                                                        <div class="">
-                                                            <h5 class="m-b-0 font-16 font-medium">Julian Josephs</h5><span class="text-muted">Josephs@gmail.com</span></div>
-                                                    </div>
-                                                </td>
-                                                <td>MedicalPro WP Theme</td>
-                                                <td>
-                                                    <div class="popover-icon">
-                                                        <a class="btn-circle btn btn-info" href="javascript:void(0)">SS</a>
-                                                        <a class="btn-circle btn btn-purple text-white popover-item" href="javascript:void(0)">DS</a>
-                                                        <a class="btn-circle btn btn-danger text-white popover-item" href="javascript:void(0)">RP</a>
-                                                        <a class="btn-circle btn btn-outline-secondary" href="javascript:void(0)">+</a>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center"><i class="fa fa-circle text-success" data-toggle="tooltip" data-placement="top" title="Active"></i></td>
-                                                <td class="text-center">35</td>
-                                                <td class="font-medium text-center">$96K</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex no-block align-items-center">
-                                                        <div class="m-r-10"><img src="../../assets/images/users/2.jpg" alt="user" class="rounded-circle" width="45" /></div>
-                                                        <div class="">
-                                                            <h5 class="m-b-0 font-16 font-medium">Jan Petrovic</h5><span class="text-muted">hgover@gmail.com</span></div>
-                                                    </div>
-                                                </td>
-                                                <td>Hosting Press HTML</td>
-                                                <td>
-                                                    <div class="popover-icon">
-                                                        <a class="btn-circle btn btn-purple text-white" href="javascript:void(0)">RP</a>
-                                                        <a class="btn-circle btn btn-outline-secondary" href="javascript:void(0)">+</a>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center"><i class="fa fa-circle text-info" data-toggle="tooltip" data-placement="top" title="Pending"></i></td>
-                                                <td class="text-center">35</td>
-                                                <td class="font-medium text-center">$96K</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                       <c:forEach items="${images}" var="image">
+                                           <img src="data:image/jpeg;base64,${image.base}" width="50" height="50"/>
+                                       </c:forEach>
                                 </div>
                             </div>
                         </div>

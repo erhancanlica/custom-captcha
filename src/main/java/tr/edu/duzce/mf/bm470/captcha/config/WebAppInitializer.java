@@ -7,11 +7,20 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
+import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
 public class WebAppInitializer implements WebApplicationInitializer {
+
+    private static final String LOCATION = "E:/temp/";
+
+    private static final long MAX_FILE_SIZE = 1024 * 1024 * 3;//3MB
+
+    private static final long MAX_REQUEST_SIZE = 1024 * 1024 * 18;//18MB
+
+    private static final int FILE_SIZE_THRESHOLD = 0;
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
@@ -24,6 +33,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
         dispatcherServlet.setLoadOnStartup(1);
         dispatcherServlet.addMapping("/");
+        dispatcherServlet.setMultipartConfig(getMultipartConfigElement());
         dispatcherServlet.setInitParameter("throwExceptionIfNoHandlerFound", "true");
         CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
         characterEncodingFilter.setEncoding("UTF-8");
@@ -37,7 +47,10 @@ public class WebAppInitializer implements WebApplicationInitializer {
         applicationContext.setConfigLocation("tr.edu.duzce.mf.bm470.captcha.config");
         return applicationContext;
     }
-
+    private MultipartConfigElement getMultipartConfigElement(){
+        MultipartConfigElement multipartConfigElement = new MultipartConfigElement(LOCATION, MAX_FILE_SIZE, MAX_REQUEST_SIZE, FILE_SIZE_THRESHOLD);
+        return multipartConfigElement;
+    }
 
 
 }
