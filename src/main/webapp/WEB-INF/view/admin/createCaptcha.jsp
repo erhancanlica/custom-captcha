@@ -101,13 +101,13 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label  class="control-label col-form-label">Captcha Ismi</label>
-                                            <input type="text" class="form-control" name="name" placeholder="Captcha ismi giriniz">
+                                            <input type="text" class="form-control" name="captchaName" placeholder="Captcha ismi giriniz">
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label class="control-label col-form-label">Kategori</label>
-                                            <input type="text" class="form-control" name="kategori" placeholder="Kategori giriniz">
+                                            <input type="text" class="form-control" name="captchaCategory" placeholder="Kategori giriniz">
                                         </div>
                                     </div>
 

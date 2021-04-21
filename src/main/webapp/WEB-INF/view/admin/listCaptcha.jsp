@@ -80,17 +80,33 @@
                                     <tr>
                                         <th>Captcha Adı</th>
                                         <th>Kategori</th>
+                                        <th>Statü</th>
                                         <th>Resimler</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="tempCaptcha" items="${captcha}">
+                                        <c:forEach var="captcha" items="${captchas}">
                                             <tr>
-                                                <td><span class="label label-custom">${tempCaptcha.name}</span></td>
-                                                <td><span class="label label-custom">${tempCaptcha.category}</span></td>
-<%--                                                <c:forEach items="${images}" var="image">--%>
-<%--                                                    <td><img src="data:image/jpeg;base64,${image.base}" width="50" height="50"/></td>--%>
-<%--                                                </c:forEach>--%>
+                                                <td><span class="label label-custom">${captcha.captchaName}</span></td>
+                                                <td><span class="label label-custom">${captcha.captchaCategory}</span></td>
+                                                <td>
+                                                <c:choose>
+                                                    <c:when test="${captcha.status}">
+                                                        <span>Aktif</span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span>(Pasif) 6 fotoğraf bulunmalı</span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                                </td>
+                                                <c:forEach items="${captcha.imageWrapper}" var="image" varStatus="imageStatus">
+                                                    <td>
+                                                        <img src="data:image/jpeg;base64,${image.base}" width="50" height="50"/>
+                                                        <c:if test="${imageStatus.index % 2 == 0}">
+                                                            <br/>
+                                                        </c:if>
+                                                    </td>
+                                                </c:forEach>
                                             </tr>
                                          </c:forEach>
                                     </tbody>

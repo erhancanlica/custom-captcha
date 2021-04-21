@@ -20,6 +20,7 @@ public class CaptchaDto implements Serializable {
     private long captchaId;
     private String captchaName;
     private String captchaCategory;
-    private Set<ImageWrapper> imageWrapper;
+    private boolean status;
+    private List<ImageWrapperDto> imageWrapper;
 
 }

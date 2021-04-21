@@ -10,9 +10,11 @@ import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
 import tr.edu.duzce.mf.bm470.captcha.model.Users;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.AdminService;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
+import tr.edu.duzce.mf.bm470.captcha.utils.ImageUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -43,39 +45,29 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<CaptchaDto> findAll() {
-
-          List<Captcha> listCaptcha = captchaService.findAll();
-//        List<ImageWrapper> imageWrappers = imageService.findAll();
-
-
-            List<CaptchaDto> captchaDtos = listCaptcha.stream().map(mapCaptcha -> {
-                    mapCaptcha.getImageWrappers().forEach(imageWrapper -> {
-                        try {
-                            imageWrapper.setBase(imageWrapper.getImgUtility());
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    });
-
-                    return CaptchaDto.builder()
-                    .captchaId(mapCaptcha.getId())
-                    .captchaName(mapCaptcha.getName())
-                    .captchaCategory(mapCaptcha.getCategory())
-                    .imageWrapper(mapCaptcha.getImageWrappers())
-                    .build(); })
-                    .collect(Collectors.toList());
-
-
-//
-//         List<CaptchaDto> captchaDto = imageWrappers.stream().map((ImageWrapper mapWrapper) -> CaptchaDto.builder()
-//                .captchaId(mapWrapper.getCaptcha().getId())
-//                .captchaName(mapWrapper.getCaptcha().getName())
-//                .captchaCategory(mapWrapper.getCaptcha().getCategory())
-//                .imageWrapper(mapWrapper.getBase())
-//                .build())
-//                .collect(Collectors.toList());
-
-//        captchaDto.addAll(imageDto);
+        List<Captcha> listCaptcha = captchaService.findAll();
+        List<CaptchaDto> captchaDtos = listCaptcha.stream().map(captcha -> {
+            List<ImageWrapperDto> dtos = captcha.getImageWrappers().stream().map(image -> {
+                ImageWrapperDto dto = null;
+                try {
+                     dto = ImageWrapperDto.builder()
+                            .id(image.getId())
+                            .name(image.getName())
+                            .base(ImageUtils.getImgUtility(image.getData()))
+                            .build();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                return dto;
+            }).collect(Collectors.toList());
+            return CaptchaDto.builder()
+                    .captchaCategory(captcha.getCategory())
+                    .captchaId(captcha.getId())
+                    .captchaName(captcha.getName())
+                    .imageWrapper(dtos)
+                    .status(dtos.size()== 6)
+                    .build();
+        }).collect(Collectors.toList());
 
         return captchaDtos;
     }

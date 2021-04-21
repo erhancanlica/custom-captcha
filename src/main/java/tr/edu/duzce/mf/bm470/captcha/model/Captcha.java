@@ -1,15 +1,14 @@
 package tr.edu.duzce.mf.bm470.captcha.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -26,7 +25,7 @@ public class Captcha {
     @Column(name = "category")
     private String category;
 
-    @OneToMany(mappedBy = "captcha")
+    @OneToMany(mappedBy = "captcha",fetch = FetchType.EAGER)
     private Set<ImageWrapper> imageWrappers = new HashSet<>();
 
 

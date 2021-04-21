@@ -14,7 +14,7 @@ import javax.servlet.ServletRegistration;
 
 public class WebAppInitializer implements WebApplicationInitializer {
 
-    private static final String LOCATION = "C:/temp/";
+    private static final String LOCATION = "E:/temp/";
 
     private static final long MAX_FILE_SIZE = 1024 * 1024 * 3;//3MB
 

@@ -32,10 +32,8 @@ public class AdminController {
     @GetMapping("/listCaptcha")
     public ModelAndView getByUsers(){
         ModelAndView modelAndView = new ModelAndView("admin/listCaptcha");
-//        modelAndView.addObject("images", imageService.findAll());
-//        modelAndView.addObject("captcha", captchaService.findAll());
         List<CaptchaDto> captchaDtos = adminService.findAll();
-            modelAndView.addObject("captcha", captchaDtos);
+            modelAndView.addObject("captchas", captchaDtos);
             return modelAndView;
     }
 
