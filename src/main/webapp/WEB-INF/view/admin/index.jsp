@@ -111,11 +111,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="table-responsive">
-                                       <c:forEach items="${images}" var="image">
-                                           <img src="data:image/jpeg;base64,${image.base}" width="50" height="50"/>
-                                       </c:forEach>
-                                </div>
                             </div>
                         </div>
                     </div>

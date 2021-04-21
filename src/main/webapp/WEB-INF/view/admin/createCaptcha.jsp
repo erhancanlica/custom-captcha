@@ -95,7 +95,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <form:form action="createCaptcha" modelAttribute="captcha" method="post" enctype="multipart/form-data">
+                        <form:form action="createCaptcha"  method="post" enctype="multipart/form-data">
                             <div class="card-body">
                                 <div class="row m-auto">
                                     <div class="col-12">
@@ -119,8 +119,8 @@
                                                     <span class="input-group-text">Yüklenen</span>
                                                 </div>
                                                 <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" name="images" multiple="multiple">
-                                                    <label class="custom-file-label" data-navbarbg="images" >Buraya Tıkla!</label>
+                                                    <label for="image" class="custom-file-label" data-navbarbg="images" >Buraya Tıkla!</label>
+                                                    <input id="image" type="file" class="custom-file-input" name="images" multiple="multiple">
                                                 </div>
                                             </div>
                                         </div>

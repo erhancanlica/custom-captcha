@@ -10,9 +10,11 @@ import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
 import tr.edu.duzce.mf.bm470.captcha.service.AdminService;
+import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,11 +26,17 @@ public class AdminController {
     @Autowired
     private ImageService imageService;
 
-    @GetMapping
+    @Autowired
+    private CaptchaService captchaService;
+
+    @GetMapping("/listCaptcha")
     public ModelAndView getByUsers(){
-        ModelAndView modelAndView = new ModelAndView("admin/index");
-        modelAndView.addObject("images", imageService.findAll());
-        return modelAndView;
+        ModelAndView modelAndView = new ModelAndView("admin/listCaptcha");
+//        modelAndView.addObject("images", imageService.findAll());
+//        modelAndView.addObject("captcha", captchaService.findAll());
+        List<CaptchaDto> captchaDtos = adminService.findAll();
+            modelAndView.addObject("captcha", captchaDtos);
+            return modelAndView;
     }
 
     @GetMapping("/createCaptcha")
@@ -38,27 +46,35 @@ public class AdminController {
     }
 
     @PostMapping("/createCaptcha")
-    public String handleFileUpload(HttpServletRequest request,
-                                   @ModelAttribute CaptchaDto captchaDto) throws Exception {
+    public ModelAndView saveImage(HttpServletRequest request,
+                                   @ModelAttribute CaptchaDto captchaDto, @RequestParam("images") MultipartFile[] images) throws Exception {
 
 
-        captchaDto.getId();
+        ModelAndView modelAndView = new ModelAndView("admin/listCaptcha");
+
+        Captcha captcha = new Captcha();
+        captcha.setName(captchaDto.getCaptchaName());
+        captcha.setCategory(captchaDto.getCaptchaCategory());
+        captchaService.saveCaptcha(captcha);
 
 
-//        if (files != null && files.length > 0) {
-//            int i = 0;
-//            for (MultipartFile aFile : files){
-//                i++;
-//                System.out.println("Saving file: " + aFile.getOriginalFilename());
-//
-//                ImageWrapper uploadFile = new ImageWrapper();
-//                uploadFile.setName("file"+i);
-//                uploadFile.setData(aFile.getBytes());
-//                imageService.save(uploadFile);
-//            }
-//        }
+        if (images != null && images.length > 0) {
+            int i = 0;
+            for (MultipartFile aFile : images){
+                i++;
+                System.out.println("Saving file: " + aFile.getOriginalFilename());
 
-        return "Success";
+                ImageWrapper imageWrapper = new ImageWrapper();
+                imageWrapper.setName("file"+i);
+                imageWrapper.setData(aFile.getBytes());
+                imageWrapper.setCaptcha(captcha);
+
+                imageService.saveImage(imageWrapper);
+
+            }
+        }
+
+        return modelAndView;
     }
 
 

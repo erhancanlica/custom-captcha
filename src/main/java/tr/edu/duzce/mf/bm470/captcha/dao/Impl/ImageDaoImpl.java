@@ -20,7 +20,7 @@ public class ImageDaoImpl implements ImageDao {
     private SessionFactory sessionFactory;
 
     @Override
-    public void save(ImageWrapper imageWrapper) {
+    public void saveImage(ImageWrapper imageWrapper) {
         sessionFactory.getCurrentSession().save(imageWrapper);
     }
 

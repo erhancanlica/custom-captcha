@@ -26,7 +26,7 @@
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="<c:url value="/admin/"/>" class="sidebar-link">
+                            <a href="<c:url value="/admin/listCaptcha"/>" class="sidebar-link">
                                 <i class="mdi mdi-view-quilt"></i>
                                 <span class="hide-menu">Captcha Liste</span>
                             </a>
