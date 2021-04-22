@@ -2,11 +2,15 @@ package tr.edu.duzce.mf.bm470.captcha.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaToken;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
+
+import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.UUID;
 
 import static java.util.Objects.nonNull;
 
@@ -33,7 +37,10 @@ public class SessionController {
 
     @GetMapping("/loginUser")
     public ModelAndView loginUser(@RequestParam(value = "error", required = false) final String error,
-                              @RequestParam(value = "logout", required = false) final String logout){
+                                  @RequestParam(value = "logout", required = false) final String logout,
+                                  HttpSession session){
+        String randomid= UUID.randomUUID().toString();
+        session.setAttribute("capthcaToken", CaptchaToken.builder().token(randomid).build());
         ModelAndView modelAndView = new ModelAndView("loginUser");
         if (nonNull(error)) {
             modelAndView.addObject("error", "Kullanıcı adı veya şifre hatalı");
@@ -45,5 +52,10 @@ public class SessionController {
         return modelAndView;
     }
 
+    @PostMapping(value = "/validate",consumes = "application/json")
+    @ResponseBody
+    public boolean validate(@RequestBody List<CaptchaDto> captchaDtos,HttpSession session){
+        return true;
+    }
 
 }

@@ -23,6 +23,7 @@
     <style>
         .my-image{width: 50px;height: 50px;overflow: hidden;display: inline-block;}
         .selected-image{border-style: solid;border-color: green; }
+        a{cursor: pointer}
 
     </style>
 </head>
@@ -115,7 +116,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button id="validate" type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -146,13 +147,13 @@
 
 <script>
     var selectedImages= [];
-    $(function () {
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-        $(document).ajaxSend(function(e, xhr, options) {
-            xhr.setRequestHeader(header, token);
-        });
-    });
+    // $(function () {
+    //     var token = $("meta[name='_csrf']").attr("content");
+    //     var header = $("meta[name='_csrf_header']").attr("content");
+    //     $(document).ajaxSend(function(e, xhr, options) {
+    //         xhr.setRequestHeader(header, token);
+    //     });
+    // });
     $(document).ready(function() {
         $("#openCaptcha").click(function () {
             selectedImages = [];
@@ -160,12 +161,14 @@
         })
 
         $(".my-image").click(function () {
+            var captcha = {}
             var index = getIndex(+this.id);
             if (index > -1) {
                 selectedImages.splice(index, 1);
                 $(this).removeClass("selected-image");
             } else {
-                selectedImages.push(+this.id);
+                captcha["captchaId"] = +this.id;
+                selectedImages.push(captcha);
                 $(this).addClass("selected-image");
             }
             console.log(selectedImages);
@@ -173,11 +176,37 @@
 
         function getIndex(id){
             var index = selectedImages.findIndex(function(element){
-                return element === id;
+                return element.captchaId === id;
             });
             return index;
         }
 
+        $("#validate").click(function () {
+            console.log(selectedImages);
+            $.ajax({
+                type: "post",
+                traditional : true,
+                dataType: "json",
+                url: "validate",
+                data: JSON.stringify(selectedImages),
+                contentType: "application/json;charset=UTF-8",
+
+                success: function(response) {
+                    // if(response.result == 0){
+                    //     toastr.success(response.message)
+                    //     setTimeout(function(){
+                    //         location.reload()
+                    //     },500)
+                    // }
+                    // else {
+                    //     toastr.error(response.message)
+                    // }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    // toastr.error("Bilinmeyen Bir Hata oluştu")
+                }
+            })
+        })
     })
 
 </script>

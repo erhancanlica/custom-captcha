@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
+
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Set;
 
 
 @Data
