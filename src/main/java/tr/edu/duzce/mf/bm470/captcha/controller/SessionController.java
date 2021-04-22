@@ -1,10 +1,12 @@
 package tr.edu.duzce.mf.bm470.captcha.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 
 import static java.util.Objects.nonNull;
 
@@ -12,6 +14,9 @@ import static java.util.Objects.nonNull;
 public class SessionController {
 
     private static final String MY_LOGIN_VIEW = "login";
+
+    @Autowired
+    private CaptchaService captchaService;
 
     @GetMapping("/loginAdmin")
     public ModelAndView index(@RequestParam(value = "error", required = false) final String error,
@@ -36,6 +41,7 @@ public class SessionController {
         if (nonNull(logout)) {
             modelAndView.addObject("msg", "Başarıyla çıkış yaptın");
         }
+        modelAndView.addObject("captcha",captchaService.getCaptcha());
         return modelAndView;
     }
 

@@ -20,6 +20,11 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .my-image{width: 50px;height: 50px;overflow: hidden;display: inline-block;}
+        .selected-image{border-style: solid;border-color: green; }
+
+    </style>
 </head>
 
 <body>
@@ -66,6 +71,15 @@
                                 </div>
                                 <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" name='password'>
                             </div>
+
+                            <div class="form-group text-center">
+                                <div class="col-xs-12 p-b-20">
+                                    <button id="openCaptcha" type="button" class="btn btn-primary">
+                                        Launch demo modal
+                                    </button>
+                                </div>
+                            </div>
+
                             <div class="form-group text-center">
                                 <div class="col-xs-12 p-b-20">
                                     <input class="btn btn-block btn-lg btn-info" type="submit" value="Giriş"/>
@@ -73,6 +87,35 @@
                             </div>
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="captchaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                    <c:forEach items="${captcha.imageWrapper}" var="image" varStatus="imageStatus">
+                        <div class="col-lg-6 col-md-6 col-6">
+                            <a id="${image.id}" class="my-image">
+                                <img src="data:image/jpeg;base64,${image.base}" width="50px" height="50px"/>
+                            </a>
+                        </div>
+                    </c:forEach>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
         </div>
@@ -100,9 +143,44 @@
 <!-- Bootstrap tether Core JavaScript -->
 <script src="/resources/js/popper.min.js"></script>
 <script src="/resources/js/bootstrap.min.js"></script>
-<!-- ============================================================== -->
-<!-- This page plugin js -->
-<!-- ============================================================== -->
+
+<script>
+    var selectedImages= [];
+    $(function () {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $(document).ajaxSend(function(e, xhr, options) {
+            xhr.setRequestHeader(header, token);
+        });
+    });
+    $(document).ready(function() {
+        $("#openCaptcha").click(function () {
+            selectedImages = [];
+            $('#captchaModal').modal('show');
+        })
+
+        $(".my-image").click(function () {
+            var index = getIndex(+this.id);
+            if (index > -1) {
+                selectedImages.splice(index, 1);
+                $(this).removeClass("selected-image");
+            } else {
+                selectedImages.push(+this.id);
+                $(this).addClass("selected-image");
+            }
+            console.log(selectedImages);
+        })
+
+        function getIndex(id){
+            var index = selectedImages.findIndex(function(element){
+                return element === id;
+            });
+            return index;
+        }
+
+    })
+
+</script>
 </body>
 
 </html>

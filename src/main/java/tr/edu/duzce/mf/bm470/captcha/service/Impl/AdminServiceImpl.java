@@ -45,30 +45,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<CaptchaDto> findAll() {
-        List<Captcha> listCaptcha = captchaService.findAll();
-        List<CaptchaDto> captchaDtos = listCaptcha.stream().map(captcha -> {
-            List<ImageWrapperDto> dtos = captcha.getImageWrappers().stream().map(image -> {
-                ImageWrapperDto dto = null;
-                try {
-                     dto = ImageWrapperDto.builder()
-                            .id(image.getId())
-                            .name(image.getName())
-                            .base(ImageUtils.getImgUtility(image.getData()))
-                            .build();
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                }
-                return dto;
-            }).collect(Collectors.toList());
-            return CaptchaDto.builder()
-                    .captchaCategory(captcha.getCategory())
-                    .captchaId(captcha.getId())
-                    .captchaName(captcha.getName())
-                    .imageWrapper(dtos)
-                    .status(dtos.size()== 6)
-                    .build();
-        }).collect(Collectors.toList());
-
-        return captchaDtos;
+       return captchaService.findAll();
     }
 }
