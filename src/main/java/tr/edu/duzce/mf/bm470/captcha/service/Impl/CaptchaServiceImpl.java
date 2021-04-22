@@ -12,6 +12,7 @@ import tr.edu.duzce.mf.bm470.captcha.utils.ImageUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Transactional

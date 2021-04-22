@@ -21,6 +21,9 @@ public class ImageWrapper {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "isValid")
+    private boolean isValid;
+
     @Lob
     @Column(name = "data")
     private byte[] data;

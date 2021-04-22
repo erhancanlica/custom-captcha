@@ -38,14 +38,14 @@ public class AdminController {
     }
 
     @GetMapping("/createCaptcha")
-    public ModelAndView getCaptchaForm(){
+    public ModelAndView getCaptchaForm(@RequestParam(value = "lengthErr", required = false) String lengthErr){
         ModelAndView modelAndView = new ModelAndView("admin/createCaptcha");
         return modelAndView;
     }
 
     @PostMapping("/createCaptcha")
     public ModelAndView saveImage(HttpServletRequest request,
-                                   @ModelAttribute CaptchaDto captchaDto, @RequestParam("images") MultipartFile[] images) throws Exception {
+                                   @ModelAttribute CaptchaDto captchaDto, @RequestParam("trueImages") MultipartFile[] trueImages, @RequestParam("falseImages") MultipartFile[] falseImages) throws Exception {
 
 
         ModelAndView modelAndView = new ModelAndView("admin/listCaptcha");
@@ -56,9 +56,9 @@ public class AdminController {
         captchaService.saveCaptcha(captcha);
 
 
-        if (images != null && images.length > 0) {
+        if (trueImages != null && trueImages.length == 6) {
             int i = 0;
-            for (MultipartFile aFile : images){
+            for (MultipartFile aFile : trueImages){
                 i++;
                 System.out.println("Saving file: " + aFile.getOriginalFilename());
 
@@ -70,6 +70,8 @@ public class AdminController {
                 imageService.saveImage(imageWrapper);
 
             }
+        } else {
+
         }
 
         return modelAndView;
