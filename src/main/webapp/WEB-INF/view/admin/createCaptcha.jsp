@@ -116,11 +116,26 @@
                                             <label class="control-label col-form-label">Resmi Seç</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text">Yüklenen</span>
+                                                    <span class="input-group-text">Doğru Resimler</span>
                                                 </div>
                                                 <div class="custom-file">
-                                                    <label for="image" class="custom-file-label" data-navbarbg="images" >Buraya Tıkla!</label>
-                                                    <input id="image" type="file" class="custom-file-input" name="trueImages" multiple="multiple">
+                                                    <label for="trueImages" class="custom-file-label" data-navbarbg="images" >Buraya Tıkla!</label>
+                                                    <input id="trueImages" type="file" class="custom-file-input" name="trueImages" multiple="multiple">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-form-label">Resmi Seç</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Yanlış Resimler</span>
+                                                </div>
+                                                <div class="custom-file">
+                                                    <label for="falseImages" class="custom-file-label" data-navbarbg="images" >Buraya Tıkla!</label>
+                                                    <input id="falseImages" type="file" class="custom-file-input" name="falseImages" multiple="multiple">
                                                 </div>
                                             </div>
                                         </div>

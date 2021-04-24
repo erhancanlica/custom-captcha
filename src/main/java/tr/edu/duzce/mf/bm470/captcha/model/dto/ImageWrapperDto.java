@@ -13,4 +13,5 @@ public class ImageWrapperDto {
     private long id;
     private String name;
     private String base;
+    private boolean isValid;
 }

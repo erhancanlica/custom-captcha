@@ -39,6 +39,7 @@ public class CaptchaServiceImpl implements CaptchaService {
                             .id(image.getId())
                             .name(image.getName())
                             .base(ImageUtils.getImgUtility(image.getData()))
+                            .isValid(image.isValid())
                             .build();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -74,6 +75,7 @@ public class CaptchaServiceImpl implements CaptchaService {
                                     .id(image.getId())
                                     .name(image.getName())
                                     .base(ImageUtils.getImgUtility(image.getData()))
+                                    .isValid(image.isValid())
                                     .build();
             }catch (UnsupportedEncodingException e){
                 e.printStackTrace();

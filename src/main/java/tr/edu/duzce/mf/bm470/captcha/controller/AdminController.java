@@ -59,19 +59,29 @@ public class AdminController {
         captchaService.saveCaptcha(captcha);
 
 
-        if (trueImages != null) {
+        if (trueImages != null && falseImages != null) {
             int i = 0;
             for (MultipartFile aFile : trueImages){
                 i++;
                 System.out.println("Saving file: " + aFile.getOriginalFilename());
 
-                ImageWrapper imageWrapper = new ImageWrapper();
-                imageWrapper.setName("file"+i);
-                imageWrapper.setData(aFile.getBytes());
-                imageWrapper.setCaptcha(captcha);
+                ImageWrapper trueImage = new ImageWrapper();
+                trueImage.setName("file"+i);
+                trueImage.setData(aFile.getBytes());
+                trueImage.setCaptcha(captcha);
+                trueImage.setValid(true);
+                imageService.saveImage(trueImage);
+            }
+            for (MultipartFile aFile : falseImages){
+                i++;
+                System.out.println("Saving file: " + aFile.getOriginalFilename());
 
-                imageService.saveImage(imageWrapper);
-
+                ImageWrapper falseImage = new ImageWrapper();
+                falseImage.setName("file"+i);
+                falseImage.setData(aFile.getBytes());
+                falseImage.setCaptcha(captcha);
+                falseImage.setValid(false);
+                imageService.saveImage(falseImage);
             }
         } else {
 
@@ -85,7 +95,6 @@ public class AdminController {
     @PostMapping("/findById/{captchaId}")
     public ModelAndView findById(@PathVariable long captchaId, HttpSession httpSession){
         ModelAndView modelAndView = new ModelAndView("imageContent");
-
         CaptchaDto captchaDto = adminService.findById(captchaId);
         modelAndView.addObject("captcha", captchaDto);
         return modelAndView;

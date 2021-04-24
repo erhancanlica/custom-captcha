@@ -32,14 +32,7 @@ public class ImageDaoImpl implements ImageDao {
         Root<ImageWrapper> root = criteriaQuery.from(ImageWrapper.class);
         criteriaQuery.select(root);
         Query<ImageWrapper> query = session.createQuery(criteriaQuery);
-        List<ImageWrapper> imageWrappers = query.getResultList();
-//        imageWrappers.forEach(imageWrapper -> {
-//            try {
-//                imageWrapper.setBase(imageWrapper.getImgUtility());
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-//        });
-        return imageWrappers;
+
+        return query.getResultList();
     }
 }
