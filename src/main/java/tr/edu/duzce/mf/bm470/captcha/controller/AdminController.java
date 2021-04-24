@@ -2,6 +2,8 @@ package tr.edu.duzce.mf.bm470.captcha.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,10 +32,11 @@ public class AdminController {
     private CaptchaService captchaService;
 
     @GetMapping("/listCaptcha")
-    public ModelAndView getByUsers(){
-        ModelAndView modelAndView = new ModelAndView("admin/listCaptcha");
+    public ModelAndView getByUsers(final Model model){
+        final ModelAndView modelAndView = new ModelAndView("admin/listCaptcha");
         List<CaptchaDto> captchaDtos = adminService.findAll();
             modelAndView.addObject("captchas", captchaDtos);
+            modelAndView.addObject("captcha", new CaptchaDto());
             return modelAndView;
     }
 
@@ -56,7 +59,7 @@ public class AdminController {
         captchaService.saveCaptcha(captcha);
 
 
-        if (trueImages != null && trueImages.length == 6) {
+        if (trueImages != null) {
             int i = 0;
             for (MultipartFile aFile : trueImages){
                 i++;
@@ -79,13 +82,13 @@ public class AdminController {
 
 
 
-    @GetMapping("/findById")
-    public ModelAndView findById(HttpSession httpSession){
-        ModelAndView modelAndView = new ModelAndView("admin/listCaptcha");
-//        CaptchaDto captchaDto = adminService.findById(id);
-//        modelAndView.addObject("captcha", captchaDto);
+    @PostMapping("/findById/{captchaId}")
+    public ModelAndView findById(@PathVariable long captchaId, HttpSession httpSession){
+        ModelAndView modelAndView = new ModelAndView("imageContent");
 
-        return null;
+        CaptchaDto captchaDto = adminService.findById(captchaId);
+        modelAndView.addObject("captcha", captchaDto);
+        return modelAndView;
     }
 
 }

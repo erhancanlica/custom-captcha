@@ -122,23 +122,17 @@
             <div class="modal fade" id="captchaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div  class="modal-header">
                             <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                                <c:forEach items="${captcha.imageWrapper}" var="image" varStatus="imageStatus">
-                                    <div class="col-lg-6 col-md-6 col-6">
-                                        <a id="${image.id}" class="my-image">
-                                            <img src="data:image/jpeg;base64,${image.base}" width="50px" height="50px"/>
-                                        </a>
-                                    </div>
-                                </c:forEach>
-                            </div>
+                        <div id="captchaDiv" class="modal-body">
+                            <p>Seeellam</p>
+                            <jsp:include page="../imageContent.jsp" />
                         </div>
-
+                    </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button id="validate" type="button" class="btn btn-primary">Save changes</button>
@@ -154,43 +148,37 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
         <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.24/af-2.3.5/b-1.7.0/b-colvis-1.7.0/b-html5-1.7.0/b-print-1.7.0/cr-1.5.3/date-1.0.3/fc-3.3.2/fh-3.1.8/kt-2.6.1/r-2.2.7/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.3/datatables.min.js"></script>
         <script>
-            $(function () {
-                var token = $("meta[name='_csrf']").attr("content");
-                var header = $("meta[name='_csrf_header']").attr("content");
-                $(document).ajaxSend(function(e, xhr, options) {
-                    xhr.setRequestHeader(header, token);
-                });
-            });
+            // $(function () {
+            //     var token = $("meta[name='_csrf']").attr("content");
+            //     var header = $("meta[name='_csrf_header']").attr("content");
+            //     $(document).ajaxSend(function(e, xhr, options) {
+            //         xhr.setRequestHeader(header, token);
+            //     });
+            // });
+
             $(document).ready(function() {
-                var selectedImages= [];
 
-                $("#openCaptcha").click(function () {
 
+                $("#openCaptcha").click(function (e) {
+
+                    e.preventDefault();
+                    $("#captchaDiv").html("");
                     var id = $(this).data('id')
                     console.log(id);
                     $.ajax({
-                        type: "GET",
-                        url: "/admin/findById",
+                        type: "post",
+                        url: "/admin/findById/"+id,
 
                         success: function (response){
-                            if (response.result == 0){
-                                toastr.success(response.message)
-                                setTimeout(function (){
-                                    location.reload()
-                                }, 500)
-                            }
-                            else{
-                                toastr.error(response.message)
-                            }
+                           console.log(response)
+                            $("#captchaDiv").html(response);
+                            $('#captchaModal').modal('show');
                         },
 
                         error: function (jqXHR, textStatus, errorThrown){
                             toastr.error("Bilinmeyen Bir Hata Oluştu")
                         }
                         });
-
-                    selectedImages = [];
-                    $('#captchaModal').modal('show');
                 })
                 //
                 // $(".my-image").click(function () {
