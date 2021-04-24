@@ -1,10 +1,7 @@
 package tr.edu.duzce.mf.bm470.captcha.model;
 
 import lombok.*;
-import org.apache.commons.codec.binary.Base64;
-
 import javax.persistence.*;
-import java.io.UnsupportedEncodingException;
 
 @Table(name = "imageWrapper")
 @Entity

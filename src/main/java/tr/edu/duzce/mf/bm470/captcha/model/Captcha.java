@@ -29,4 +29,6 @@ public class Captcha {
     private Set<ImageWrapper> imageWrappers = new HashSet<>();
 
 
+    public void stream() {
+    }
 }

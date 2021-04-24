@@ -47,4 +47,9 @@ public class AdminServiceImpl implements AdminService {
     public List<CaptchaDto> findAll() {
        return captchaService.findAll();
     }
+
+    @Override
+    public CaptchaDto findById(Long id) {
+        return captchaService.findById(id);
+    }
 }

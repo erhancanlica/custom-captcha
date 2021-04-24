@@ -120,7 +120,7 @@
                                                 </div>
                                                 <div class="custom-file">
                                                     <label for="image" class="custom-file-label" data-navbarbg="images" >Buraya Tıkla!</label>
-                                                    <input id="image" type="file" class="custom-file-input" name="images" multiple="multiple">
+                                                    <input id="image" type="file" class="custom-file-input" name="trueImages" multiple="multiple">
                                                 </div>
                                             </div>
                                         </div>

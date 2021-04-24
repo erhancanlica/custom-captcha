@@ -1,7 +1,5 @@
 package tr.edu.duzce.mf.bm470.captcha.config;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

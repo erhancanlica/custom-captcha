@@ -85,13 +85,13 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="captcha" items="${captchas}">
+                                        <c:forEach var="capt" items="${captchas}">
                                             <tr>
-                                                <td><span class="label label-custom">${captcha.captchaName}</span></td>
-                                                <td><span class="label label-custom">${captcha.captchaCategory}</span></td>
+                                                <td><span class="label label-custom">${capt.captchaName}</span></td>
+                                                <td><span class="label label-custom">${capt.captchaCategory}</span></td>
                                                 <td>
                                                 <c:choose>
-                                                    <c:when test="${captcha.status}">
+                                                    <c:when test="${capt.status}">
                                                         <span>Aktif</span>
                                                     </c:when>
                                                     <c:otherwise>
@@ -99,14 +99,12 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                                 </td>
-                                                <c:forEach items="${captcha.imageWrapper}" var="image" varStatus="imageStatus">
-                                                    <td>
-                                                        <img src="data:image/jpeg;base64,${image.base}" width="50" height="50"/>
-                                                        <c:if test="${imageStatus.index % 2 == 0}">
-                                                            <br/>
-                                                        </c:if>
-                                                    </td>
-                                                </c:forEach>
+                                                <td>
+                                                    <a id="openCaptcha" data-id="${capt.captchaId}">
+                                                        <i class="fas fa-trash-alt" data-toggle="tooltip"
+                                                           data-placement="bottom" title="Göster"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
                                          </c:forEach>
                                     </tbody>
@@ -118,6 +116,38 @@
             </div>
             <jsp:include page="../footer.jsp"></jsp:include>
         </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="captchaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                                <c:forEach items="${captcha.imageWrapper}" var="image" varStatus="imageStatus">
+                                    <div class="col-lg-6 col-md-6 col-6">
+                                        <a id="${image.id}" class="my-image">
+                                            <img src="data:image/jpeg;base64,${image.base}" width="50px" height="50px"/>
+                                        </a>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button id="validate" type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
@@ -132,51 +162,59 @@
                 });
             });
             $(document).ready(function() {
+                var selectedImages= [];
 
-                var tableSearching = $('#file_export').DataTable({
-                    serverSide: true,
-                    processing: false,
-                    ordering: false,
-                    ajax: {
-                        url: "/admin/listCaptcha",
-                        type: "get",
-                        dataType: 'json',
-                        dataSrc: "",
-                        data: function (data) {
-                            delete data.columns;
-                            if($.trim($('input[name=tourType]').val()).length){
-                                data.tourType = $('input[name=tourType]').val();
-                            }
-                            if($.trim($('input[name=details]').val()).length){
-                                data.details = $('input[name=details]').val();
-                            }
-                            if($.trim($('input[name=location]').val()).length){
-                                data.location = $('input[name=location]').val();
-                            }
-                            if($.trim($('input[name=capasity]').val()).length){
-                                data.capasity = $('input[name=capasity]').val();
-                            }
-                            if($.trim($('input[name=price]').val()).length){
-                                data.price = $('input[name=price]').val();
-                            }
+                $("#openCaptcha").click(function () {
 
+                    var id = $(this).data('id')
+                    console.log(id);
+                    $.ajax({
+                        type: "GET",
+                        url: "/admin/findById",
+
+                        success: function (response){
+                            if (response.result == 0){
+                                toastr.success(response.message)
+                                setTimeout(function (){
+                                    location.reload()
+                                }, 500)
+                            }
+                            else{
+                                toastr.error(response.message)
+                            }
                         },
-                    },
-                });
 
-
-                $('.buttons-copy, .buttons-csv, .buttons-print, .buttons-pdf, .buttons-excel').addClass('btn btn-primary mr-1');
-                tableSearching.columns().every(function () {
-                    var that = this;
-
-                    $('input', this.footer()).on('keyup change', function () {
-                        if (that.search() !== this.value) {
-                            that
-                                .search(this.value)
-                                .draw();
+                        error: function (jqXHR, textStatus, errorThrown){
+                            toastr.error("Bilinmeyen Bir Hata Oluştu")
                         }
-                    });
-                });
+                        });
+
+                    selectedImages = [];
+                    $('#captchaModal').modal('show');
+                })
+                //
+                // $(".my-image").click(function () {
+                //     var captcha = {}
+                //     var index = getIndex(+this.id);
+                //     if (index > -1) {
+                //         selectedImages.splice(index, 1);
+                //         $(this).removeClass("selected-image");
+                //     } else {
+                //         captcha["captchaId"] = +this.id;
+                //         selectedImages.push(captcha);
+                //         $(this).addClass("selected-image");
+                //     }
+                //     console.log(selectedImages);
+                // })
+                //
+                //
+                // function getIndex(id){
+                //     var index = selectedImages.findIndex(function(element){
+                //         return element.captchaId === id;
+                //     });
+                //     return index;
+                // }
+
             });
         </script>
 
@@ -184,3 +222,12 @@
 
 </html>
 
+
+<%--c:forEach items="${captcha.imageWrapper}" var="image" varStatus="imageStatus">--%>
+<%--<td>--%>
+<%--    <img src="data:image/jpeg;base64,${image.base}" width="50" height="50"/>--%>
+<%--    <c:if test="${imageStatus.index % 2 == 0}">--%>
+<%--        <br/>--%>
+<%--    </c:if>--%>
+<%--</td>--%>
+<%--</c:forEach>--%>

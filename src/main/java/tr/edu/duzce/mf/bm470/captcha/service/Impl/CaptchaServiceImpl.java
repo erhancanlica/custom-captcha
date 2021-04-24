@@ -62,4 +62,41 @@ public class CaptchaServiceImpl implements CaptchaService {
         CaptchaDto captchaDto = findAll().get(0);
         return captchaDto;
     }
+
+    @Override
+    public CaptchaDto findById(Long id) {
+        Captcha captcha = captchaDao.findById(id);
+
+        List<ImageWrapperDto> imageWrapper = captcha.getImageWrappers().stream().map(image -> {
+            ImageWrapperDto imageWrapperDto = null;
+            try{
+                imageWrapperDto = ImageWrapperDto.builder()
+                                    .id(image.getId())
+                                    .name(image.getName())
+                                    .base(ImageUtils.getImgUtility(image.getData()))
+                                    .build();
+            }catch (UnsupportedEncodingException e){
+                e.printStackTrace();
+            }
+
+            return  imageWrapperDto;
+        }).collect(Collectors.toList());
+
+        return CaptchaDto.builder()
+                .captchaCategory(captcha.getCategory())
+                .captchaId(captcha.getId())
+                .captchaName(captcha.getName())
+                .imageWrapper(imageWrapper)
+                .status(imageWrapper.size() == 6)
+                .build();
+    }
 }
+
+
+
+
+
+
+
+
+

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ImageWrapperDto {
-    private  long id;
+    private long id;
     private String name;
     private String base;
 }

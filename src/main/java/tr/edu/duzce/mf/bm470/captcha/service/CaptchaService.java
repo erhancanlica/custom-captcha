@@ -12,4 +12,6 @@ public interface CaptchaService {
     List<CaptchaDto> findAll();
 
     CaptchaDto getCaptcha();
+
+    CaptchaDto findById(Long id);
 }

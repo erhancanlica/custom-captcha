@@ -15,4 +15,6 @@ public interface AdminService {
     Admins findByUser(Users user);
 
     List<CaptchaDto> findAll();
+
+    CaptchaDto findById(Long id);
 }

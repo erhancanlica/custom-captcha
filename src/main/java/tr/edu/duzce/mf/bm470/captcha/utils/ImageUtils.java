@@ -1,7 +1,6 @@
 package tr.edu.duzce.mf.bm470.captcha.utils;
 
 import org.apache.commons.codec.binary.Base64;
-
 import java.io.UnsupportedEncodingException;
 
 public class ImageUtils {

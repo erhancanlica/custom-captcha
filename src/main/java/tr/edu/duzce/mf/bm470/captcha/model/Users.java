@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import tr.edu.duzce.mf.bm470.captcha.model.enums.UserType;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
