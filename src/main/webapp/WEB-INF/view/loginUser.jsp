@@ -21,9 +21,14 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        .my-image{width: 50px;height: 50px;overflow: hidden;display: inline-block;}
+        .my-image{
+            width: 128px;height: 128px;
+            overflow: hidden;
+            display: inline-block;}
         .selected-image{border-style: solid;border-color: green; }
         a{cursor: pointer}
+
+
 
     </style>
 </head>
@@ -96,19 +101,28 @@
     <!-- Modal -->
     <div class="modal fade" id="captchaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-content" style="width: 420px;padding-right: 10px">
+                <div class="modal-header d-block " >
+                    <button type="button" class="close " data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <div style="width: 360px ;background-color: red ;padding-left: 5px;padding-top: 5px; " >
+                        <h2 class="modal-title text-capitalize text-primary" id="exampleModalLongTitle">${captcha.captchaCategory}</h2>
+                        <div><h4>içeren fotoğrafları seçiniz.</h4></div>
+
+                    </div>
+
+
+
+
+
                 </div>
                 <div class="modal-body">
                     <div class="row">
                     <c:forEach items="${captcha.imageWrapper}" var="image" varStatus="imageStatus">
-                        <div class="col-lg-6 col-md-6 col-6">
+                        <div class="col-lg-4 col-md-4 col-4 mt-1">
                             <a id="${image.id}" class="my-image">
-                                <img src="data:image/jpeg;base64,${image.base}" width="50px" height="50px"/>
+                                <img src="data:image/jpeg;base64,${image.base}" width="100%" height="100%"/>
                             </a>
                         </div>
                     </c:forEach>
