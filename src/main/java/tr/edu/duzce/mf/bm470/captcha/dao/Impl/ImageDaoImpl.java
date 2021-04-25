@@ -6,12 +6,10 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import tr.edu.duzce.mf.bm470.captcha.dao.ImageDao;
+import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import java.io.UnsupportedEncodingException;
+import javax.persistence.criteria.*;
 import java.util.List;
 
 @Repository

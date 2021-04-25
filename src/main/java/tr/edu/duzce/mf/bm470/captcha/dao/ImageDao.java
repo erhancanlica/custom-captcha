@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface ImageDao {
     void saveImage(ImageWrapper imageWrapper);
+
     List<ImageWrapper> findAll();
+
 }

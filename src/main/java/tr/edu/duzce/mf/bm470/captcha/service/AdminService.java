@@ -17,4 +17,6 @@ public interface AdminService {
     List<CaptchaDto> findAll();
 
     CaptchaDto findById(Long id);
+
+    void deleteCaptcha(long captchaId);
 }

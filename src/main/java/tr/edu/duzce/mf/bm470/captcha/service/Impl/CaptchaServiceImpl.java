@@ -92,6 +92,11 @@ public class CaptchaServiceImpl implements CaptchaService {
                 .status(imageWrapper.size() == 6)
                 .build();
     }
+
+    @Override
+    public void deleteCaptcha(Captcha captcha) {
+         captchaDao.deleteCaptcha(captcha);
+    }
 }
 
 

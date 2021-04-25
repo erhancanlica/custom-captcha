@@ -109,13 +109,7 @@
                     <div style="width: 360px ;background-color: red ;padding-left: 5px;padding-top: 5px; " >
                         <h2 class="modal-title text-capitalize text-primary" id="exampleModalLongTitle">${captcha.captchaCategory}</h2>
                         <div><h4>içeren fotoğrafları seçiniz.</h4></div>
-
                     </div>
-
-
-
-
-
                 </div>
                 <div class="modal-body">
                     <div class="row">

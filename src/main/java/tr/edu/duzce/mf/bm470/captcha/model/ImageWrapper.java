@@ -25,7 +25,7 @@ public class ImageWrapper {
     @Column(name = "data")
     private byte[] data;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "captchaId", nullable = false)
     private Captcha captcha;
 }

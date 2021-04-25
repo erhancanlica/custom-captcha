@@ -52,4 +52,14 @@ public class AdminServiceImpl implements AdminService {
     public CaptchaDto findById(Long id) {
         return captchaService.findById(id);
     }
+
+    @Override
+    public void deleteCaptcha(long captchaId) {
+//        imageService.deleteImage(captchaId);
+
+        Captcha captcha = Captcha.builder()
+                .id(captchaId)
+                .build();
+        captchaService.deleteCaptcha(captcha);
+    }
 }

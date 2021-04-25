@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository;
 import tr.edu.duzce.mf.bm470.captcha.dao.CaptchaDao;
 import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import org.hibernate.query.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+
+import javax.persistence.criteria.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Repository
@@ -50,5 +49,16 @@ public class CaptchaDaoImpl implements CaptchaDao {
         captcha = captchaQuery.getSingleResult();
 
         return captcha;
+    }
+
+    @Override
+    public void deleteCaptcha(Captcha captcha) {
+        Session session = sessionFactory.getCurrentSession();
+
+        Object persistentInstance = session.load(Captcha.class, captcha.getId());
+        if (persistentInstance != null) {
+            session.delete(persistentInstance);
+        }
+
     }
 }

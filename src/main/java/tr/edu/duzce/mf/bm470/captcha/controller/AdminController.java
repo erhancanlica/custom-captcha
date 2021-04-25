@@ -3,13 +3,13 @@ package tr.edu.duzce.mf.bm470.captcha.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
 import tr.edu.duzce.mf.bm470.captcha.service.AdminService;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
@@ -90,14 +90,25 @@ public class AdminController {
         return modelAndView;
     }
 
-
-
     @PostMapping("/findById/{captchaId}")
     public ModelAndView findById(@PathVariable long captchaId, HttpSession httpSession){
         ModelAndView modelAndView = new ModelAndView("imageContent");
         CaptchaDto captchaDto = adminService.findById(captchaId);
         modelAndView.addObject("captcha", captchaDto);
         return modelAndView;
+    }
+
+    @DeleteMapping("/deleteCaptcha/{captchaId}")
+    @ResponseBody
+    public void deleteCaptcha(@PathVariable long captchaId, HttpSession httpSession){
+
+        adminService.deleteCaptcha(captchaId);
+    }
+
+    @PutMapping("/setCaptcha/{imageId}")
+    @ResponseBody
+    public void setCatpcha(@PathVariable long imageId, @RequestParam MultipartFile file, HttpSession httpSession){
+        System.out.println("ok");
     }
 
 }

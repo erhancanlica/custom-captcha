@@ -25,10 +25,6 @@ public class Captcha {
     @Column(name = "category")
     private String category;
 
-    @OneToMany(mappedBy = "captcha",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "captcha",fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ImageWrapper> imageWrappers = new HashSet<>();
-
-
-    public void stream() {
-    }
 }

@@ -14,4 +14,6 @@ public interface CaptchaService {
     CaptchaDto getCaptcha();
 
     CaptchaDto findById(Long id);
+
+    void deleteCaptcha(Captcha captcha);
 }
