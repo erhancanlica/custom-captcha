@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html dir="ltr">
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../resources/assets/favicon.png">
     <title>Nice admin Template - The Ultimate Multipurpose admin template</title>
     <!-- Custom CSS -->
     <link href="/resources/style.min.css" rel="stylesheet">
@@ -25,13 +24,19 @@
     <div class="main-wrapper">
         <!-- ============================================================== -->
         <!-- Preloader - style you can find in spinners.css -->
+        <div class="preloader">
+            <div class="lds-ripple">
+                <div class="lds-pos"></div>
+                <div class="lds-pos"></div>
+            </div>
+        </div>
         <!-- ============================================================== -->
         <div class="error-box">
             <div class="error-body text-center">
-                <h1 class="error-title">404</h1>
+                <h1 class="error-title text-danger">404</h1>
                 <h3 class="text-uppercase error-subtitle">Page Not Found !</h3>
                 <p class="text-muted m-t-30 m-b-30">YOU SEEM TO BE TRYING TO FIND HIS WAY HOME</p>
-                <a href="index.html" class="btn btn-info btn-rounded waves-effect waves-light m-b-40">Back to home</a> </div>
+                <a href="/loginAdmin" class="btn btn-info btn-rounded waves-effect waves-light m-b-40">Anasayfa</a> </div>
         </div>
         <!-- ============================================================== -->
         <!-- Login box.scss -->
@@ -59,6 +64,10 @@
     <!-- ============================================================== -->
     <!-- This page plugin js -->
     <!-- ============================================================== -->
+    <script>
+        $('[data-toggle="tooltip"]').tooltip();
+        $(".preloader").fadeOut();
+    </script>
 </body>
 
 </html>

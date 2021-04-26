@@ -17,7 +17,7 @@ public class GloabalExceptionHandler {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ModelAndView handleError(NoHandlerFoundException ex) {
 
-        ModelAndView mav = new ModelAndView("404");
+        ModelAndView mav = new ModelAndView("error/404");
         return mav;
     }
 }

@@ -68,7 +68,7 @@
                 <div class="col-lg4 col-md-4 col-4 mt-1 container">
                     <a id="${image.id}" class="my-image">
                         <img src="data:image/jpeg;base64,${image.base}" width="100%" height="100%" class="image"/>
-                        <div class="overlay" data-id = "${image.id}">
+                        <div class="overlay" data-id = "${image.id}" data-valid = "${image.isValid()}">
                             <a href="#" class="icon" title="User Profile">
                                 <i class="fa fa-upload"></i>
                             </a>
@@ -84,7 +84,7 @@
                 <div class="col-lg4 col-md-4 col-4 mt-1 container">
                     <a id="${image.id}" class="my-image">
                         <img src="data:image/jpeg;base64,${image.base}" width="100%" height="100%" class="image"/>
-                        <div class="overlay" data-id = "${image.id}">
+                        <div class="overlay" data-id = "${image.id}" data-valid = "${image.isValid()}">
                             <a href="#" class="icon" title="User Profile">
                                 <i class="fa fa-upload"></i>
                             </a>
@@ -101,26 +101,45 @@
 
     $(".overlay").click(function (){
         var id  = $(this).data('id');
+        var valid = $(this).data('valid')
 
-        $('#html_btn').data('id', id);
-
+        $('#html_btn').data('id', id).data("valid", valid);
         $('#html_btn').click();
 
     });
 
     $("input:file#html_btn").change(function(e){
-        var id = $(this).data('id')
+        var id = +$(this).data('id')
+        var valid = $(this).data('valid')
+
+        var image = {
+            id: id,
+            captchaId: "${captcha.captchaId}",
+            valid: valid,
+        }
+
         var formData = new FormData();
         formData.append("file", $('input[type=file]')[0].files[0])
-        console.log(formData)
+        formData.append("image", JSON.stringify(image))
 
         $.ajax({
             type: "put",
-            url: "admin/setCaptcha"+id,
+            url: "merge",
+            processData: false,
+            contentType: false,
+            enctype: 'multipart/form-data',
             data: formData,
 
-            success: function (response){
-                console.log(response)
+
+            success: function (response) {
+                if (response.result == 0) {
+                    toastr.success(response.message)
+                    setTimeout(function () {
+                        location.reload()
+                    }, 500)
+                } else {
+                    toastr.error(response.message)
+                }
             },
 
             error: function (jqXHR, textStatus, errorThrown){

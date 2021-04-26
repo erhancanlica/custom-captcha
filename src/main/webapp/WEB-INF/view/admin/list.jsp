@@ -104,19 +104,18 @@
                                                 </c:choose>
                                                 </td>
                                                 <td>
-                                                    <a id="openCaptcha" data-id="${capt.captchaId}">
+                                                    <a class="update" data-id="${capt.captchaId}">
                                                         <i class="fas fa-trash-alt" data-toggle="tooltip"
                                                            data-placement="bottom" title="Göster"></i>
                                                     </a>
                                                 </td>
 
                                                 <td>
-                                                    <a id="deleteCaptcha" data-id="${capt.captchaId}">
+                                                    <a class="delete" data-id="${capt.captchaId}">
                                                         <i class="fas fa-trash" data-toggle="tooltip"
                                                            data-placement="bottom" title="Sil"></i>
                                                     </a>
                                                 </td>
-
                                             </tr>
                                          </c:forEach>
                                     </tbody>
@@ -129,6 +128,29 @@
             <jsp:include page="../footer.jsp"></jsp:include>
         </div>
 
+            <div class="modal fade" id="delete" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+
+                            <h5 class="modal-title">Kaydı silmek üzeresiniz!</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            Silmek istediğinize emin misiniz ?
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn waves-effect waves-light btn-danger" id="btnDelete">Evet</button>
+                            <button type="reset" class="btn waves-effect waves-light btn-inf" data-dismiss="modal">Hayır</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
 
             <!-- Modal -->
             <div class="modal fade" id="captchaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -140,31 +162,21 @@
                             </div>
                         </div>
                         <div id="captchaDiv" class="modal-body">
-                                <jsp:include page="../imageContent.jsp" />
+                                <jsp:include page="../content/image.jsp" />
                         </div>
                     </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button id="validate" type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+               </div>
+           </div>
         </div>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-        <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.24/af-2.3.5/b-1.7.0/b-colvis-1.7.0/b-html5-1.7.0/b-print-1.7.0/cr-1.5.3/date-1.0.3/fc-3.3.2/fh-3.1.8/kt-2.6.1/r-2.2.7/rg-1.1.2/rr-1.2.7/sc-2.0.3/sb-1.0.1/sp-1.2.2/sl-1.3.3/datatables.min.js"></script>
         <script>
-            var selectedImages= [];
-
             $(document).ready(function() {
-                $("#openCaptcha").click(function (e) {
-                    selectedImages = [];
+                $(".update").click(function (e) {
 
                     e.preventDefault();
                     $("#captchaDiv").html("");
                     var id = $(this).data('id')
+
                     $.ajax({
                         type: "post",
                         url: "/admin/findById/"+id,
@@ -181,14 +193,29 @@
                         });
                 })
 
-                $("#deleteCaptcha").click(function (e) {
+                $(".delete").click(function () {
+                    $('#delete').data('id', $(this).data('id')).modal('show');
+                })
 
-                    var id = $(this).data('id')
+                $("#btnDelete").click(function (e) {
+
+                    var id = $('#delete').data('id')
                     console.log(id);
+
                     $.ajax({
                         type: "delete",
-                        url: "/admin/deleteCaptcha/"+id,
+                        url: "/admin/delete/"+id,
 
+                        success: function (response) {
+                            if (response.result == 0) {
+                                toastr.success(response.message)
+                                setTimeout(function () {
+                                    location.reload()
+                                }, 500)
+                            } else {
+                                toastr.error(response.message)
+                            }
+                        },
                         error: function (jqXHR, textStatus, errorThrown) {
                             toastr.error("Bilinmeyen Bir Hata Oluştu")
                         }
@@ -196,11 +223,7 @@
                 })
 
             });
-
-
         </script>
-
 </body>
-
 </html>
 

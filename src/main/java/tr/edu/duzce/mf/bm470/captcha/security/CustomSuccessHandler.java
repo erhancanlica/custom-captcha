@@ -62,7 +62,7 @@ public class CustomSuccessHandler extends SavedRequestAwareAuthenticationSuccess
     public String authenticateAdmin(HttpServletRequest request, Users dbUser) {
         final Admins admin = adminService.findByUser(dbUser);
         request.getSession().setAttribute(Constants.userInfoKey, admin);
-        return "/admin/listCaptcha";
+        return "/admin/";
     }
 
     public boolean isClient(List<String> roles) {

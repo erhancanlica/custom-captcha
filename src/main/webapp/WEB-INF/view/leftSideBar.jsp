@@ -19,14 +19,14 @@
                     </a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item">
-                            <a href="<c:url value="/admin/createCaptcha"/>" class="sidebar-link">
+                            <a href="<c:url value="/admin/create"/>" class="sidebar-link">
                                 <i class="mdi mdi-view-quilt"></i>
                                 <span class="hide-menu">Captcha Ekle </span>
                             </a>
                         </li>
 
                         <li class="sidebar-item">
-                            <a href="<c:url value="/admin/listCaptcha"/>" class="sidebar-link">
+                            <a href="<c:url value="/admin/list"/>" class="sidebar-link">
                                 <i class="mdi mdi-view-quilt"></i>
                                 <span class="hide-menu">Captcha Liste</span>
                             </a>

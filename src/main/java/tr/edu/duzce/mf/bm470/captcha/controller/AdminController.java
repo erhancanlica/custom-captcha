@@ -1,29 +1,32 @@
 package tr.edu.duzce.mf.bm470.captcha.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
-import tr.edu.duzce.mf.bm470.captcha.service.AdminService;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-
-    @Autowired
-    private AdminService adminService;
 
     @Autowired
     private ImageService imageService;
@@ -31,35 +34,50 @@ public class AdminController {
     @Autowired
     private CaptchaService captchaService;
 
-    @GetMapping("/listCaptcha")
-    public ModelAndView getByUsers(final Model model){
-        final ModelAndView modelAndView = new ModelAndView("admin/listCaptcha");
-        List<CaptchaDto> captchaDtos = adminService.findAll();
-            modelAndView.addObject("captchas", captchaDtos);
-            modelAndView.addObject("captcha", new CaptchaDto());
-            return modelAndView;
-    }
-
-    @GetMapping("/createCaptcha")
-    public ModelAndView getCaptchaForm(@RequestParam(value = "lengthErr", required = false) String lengthErr){
-        ModelAndView modelAndView = new ModelAndView("admin/createCaptcha");
+    @GetMapping
+    public ModelAndView index(){
+        ModelAndView modelAndView = new ModelAndView("admin/index");
         return modelAndView;
     }
 
-    @PostMapping("/createCaptcha")
-    public ModelAndView saveImage(HttpServletRequest request,
-                                   @ModelAttribute CaptchaDto captchaDto, @RequestParam("trueImages") MultipartFile[] trueImages, @RequestParam("falseImages") MultipartFile[] falseImages) throws Exception {
+
+    @GetMapping("/list")
+    public ModelAndView getByUsers(final Model model){
+        final ModelAndView modelAndView = new ModelAndView("admin/list");
+        List<CaptchaDto> captchaDtos = captchaService.findAll();
+        modelAndView.addObject("captchas", captchaDtos);
+        modelAndView.addObject("captcha", new CaptchaDto());
+        return modelAndView;
+    }
 
 
-        ModelAndView modelAndView = new ModelAndView("admin/listCaptcha");
+    @GetMapping("/create")
+    public ModelAndView getCaptchaForm(@RequestParam(value = "lengthErr", required = false) String lengthErr){
+        ModelAndView modelAndView = new ModelAndView("admin/create");
+        return modelAndView;
+    }
+
+
+    @PostMapping("/create")
+    public String save(HttpServletRequest request,
+                       @Valid @ModelAttribute CaptchaDto captchaDto, @RequestParam("trueImages") MultipartFile[] trueImages,
+                       @RequestParam("falseImages") MultipartFile[] falseImages,
+                       BindingResult bindingResult) throws Exception {
+
+
+        if (bindingResult.hasErrors()) {
+            return "create";
+        } else {
+
+        GeneralResponse generalResponse = new GeneralResponse();
 
         Captcha captcha = new Captcha();
         captcha.setName(captchaDto.getCaptchaName());
         captcha.setCategory(captchaDto.getCaptchaCategory());
-        captchaService.saveCaptcha(captcha);
+        generalResponse = captchaService.save(captcha);
 
 
-        if (trueImages != null && falseImages != null) {
+        if (!Objects.equals(trueImages[0].getOriginalFilename(), "")){
             int i = 0;
             for (MultipartFile aFile : trueImages){
                 i++;
@@ -70,8 +88,12 @@ public class AdminController {
                 trueImage.setData(aFile.getBytes());
                 trueImage.setCaptcha(captcha);
                 trueImage.setValid(true);
-                imageService.saveImage(trueImage);
+                generalResponse = imageService.save(trueImage);
             }
+        }
+
+        if (!Objects.equals(falseImages[0].getOriginalFilename(), "")){
+            int i = 0;
             for (MultipartFile aFile : falseImages){
                 i++;
                 System.out.println("Saving file: " + aFile.getOriginalFilename());
@@ -81,34 +103,60 @@ public class AdminController {
                 falseImage.setData(aFile.getBytes());
                 falseImage.setCaptcha(captcha);
                 falseImage.setValid(false);
-                imageService.saveImage(falseImage);
+                generalResponse = imageService.save(falseImage);
             }
-        } else {
-
         }
-
-        return modelAndView;
+        return "redirect:/admin/list";
+        }
     }
+
+
 
     @PostMapping("/findById/{captchaId}")
     public ModelAndView findById(@PathVariable long captchaId, HttpSession httpSession){
-        ModelAndView modelAndView = new ModelAndView("imageContent");
-        CaptchaDto captchaDto = adminService.findById(captchaId);
+        ModelAndView modelAndView = new ModelAndView("content/image");
+        CaptchaDto captchaDto = captchaService.findById(captchaId);
         modelAndView.addObject("captcha", captchaDto);
         return modelAndView;
     }
 
-    @DeleteMapping("/deleteCaptcha/{captchaId}")
-    @ResponseBody
-    public void deleteCaptcha(@PathVariable long captchaId, HttpSession httpSession){
 
-        adminService.deleteCaptcha(captchaId);
+    @PutMapping("/merge")
+    @ResponseBody
+    public GeneralResponse merge(String image, @RequestParam(required = false) MultipartFile file , HttpSession httpSession){
+
+        ImageWrapper imageWrapper = null;
+
+        try {
+            ImageWrapperDto imageDto = new ObjectMapper().readValue(image, ImageWrapperDto.class);
+
+            Captcha captcha = Captcha.builder()
+                    .id(imageDto.getCaptchaId())
+                    .build();
+
+            imageWrapper = ImageWrapper.builder()
+                    .id(imageDto.getId())
+                    .isValid(imageDto.isValid())
+                    .data(file.getBytes())
+                    .captcha(captcha)
+                    .build();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        GeneralResponse generalResponse = imageService.merge(imageWrapper);
+        return generalResponse;
+
     }
 
-    @PutMapping("/setCaptcha/{imageId}")
+
+    @DeleteMapping("/delete/{captchaId}")
     @ResponseBody
-    public void setCatpcha(@PathVariable long imageId, @RequestParam MultipartFile file, HttpSession httpSession){
-        System.out.println("ok");
+    public GeneralResponse delete(@PathVariable long captchaId, HttpSession httpSession){
+        GeneralResponse generalResponse = new GeneralResponse();
+        generalResponse =   captchaService.delete(captchaId);
+        return generalResponse;
     }
+
 
 }

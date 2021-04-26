@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <footer class="footer text-center">
-    All Rights Reserved by CAPTCHA Designed and Developed by BMMF
 </footer>
 
 <!-- All Jquery -->

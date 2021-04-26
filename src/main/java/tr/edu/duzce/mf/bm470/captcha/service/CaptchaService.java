@@ -2,12 +2,13 @@ package tr.edu.duzce.mf.bm470.captcha.service;
 
 import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
 
 import java.util.List;
 
 public interface CaptchaService {
 
-    void saveCaptcha(Captcha captcha);
+    GeneralResponse save(Captcha captcha);
 
     List<CaptchaDto> findAll();
 
@@ -15,5 +16,5 @@ public interface CaptchaService {
 
     CaptchaDto findById(Long id);
 
-    void deleteCaptcha(Captcha captcha);
+    GeneralResponse delete(long captchaId);
 }

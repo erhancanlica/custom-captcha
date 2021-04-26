@@ -19,7 +19,7 @@ public class CaptchaDaoImpl implements CaptchaDao {
     private SessionFactory sessionFactory;
 
     @Override
-    public void saveCaptcha(Captcha captcha) {
+    public void save(Captcha captcha) {
         sessionFactory.getCurrentSession().save(captcha);
     }
 
@@ -52,13 +52,11 @@ public class CaptchaDaoImpl implements CaptchaDao {
     }
 
     @Override
-    public void deleteCaptcha(Captcha captcha) {
+    public void delete(Captcha captcha) {
         Session session = sessionFactory.getCurrentSession();
-
         Object persistentInstance = session.load(Captcha.class, captcha.getId());
         if (persistentInstance != null) {
             session.delete(persistentInstance);
         }
-
     }
 }

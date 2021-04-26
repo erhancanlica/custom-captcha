@@ -17,7 +17,7 @@ import static java.util.Objects.nonNull;
 @Controller
 public class SessionController {
 
-    private static final String MY_LOGIN_VIEW = "login";
+    private static final String MY_LOGIN_VIEW = "login/loginAdmin";
 
     @Autowired
     private CaptchaService captchaService;
@@ -41,7 +41,7 @@ public class SessionController {
                                   HttpSession session){
         String randomid= UUID.randomUUID().toString();
         session.setAttribute("capthcaToken", CaptchaToken.builder().token(randomid).build());
-        ModelAndView modelAndView = new ModelAndView("loginUser");
+        ModelAndView modelAndView = new ModelAndView("login/loginUser");
         if (nonNull(error)) {
             modelAndView.addObject("error", "Kullanıcı adı veya şifre hatalı");
         }

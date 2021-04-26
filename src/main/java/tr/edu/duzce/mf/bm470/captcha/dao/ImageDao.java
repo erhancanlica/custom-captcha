@@ -7,8 +7,8 @@ import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
 import java.util.List;
 
 public interface ImageDao {
-    void saveImage(ImageWrapper imageWrapper);
 
-    List<ImageWrapper> findAll();
+    void save(ImageWrapper imageWrapper);
 
+    void merge(ImageWrapper imageWrapper);
 }

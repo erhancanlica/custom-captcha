@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<jsp:useBean id="command" class="tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto" scope="request"></jsp:useBean>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
@@ -14,7 +16,6 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
     <title>Nice admin Template - The Ultimate Multipurpose admin template</title>
     <!-- Custom CSS -->
     <!-- Custom CSS -->
@@ -25,6 +26,12 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        .error {
+            color:red;
+        }
+    </style>
 </head>
 
 <body>
@@ -95,19 +102,21 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
-                        <form:form action="createCaptcha"  method="post" enctype="multipart/form-data">
+                        <form:form action="create"  method="post"  enctype="multipart/form-data">
                             <div class="card-body">
                                 <div class="row m-auto">
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <label  class="control-label col-form-label">Captcha Ismi</label>
-                                            <input type="text" class="form-control" name="captchaName" placeholder="Captcha ismi giriniz">
+                                            <form:label  class="control-label col-form-label" path="captchaName">Captcha Ismi</form:label>
+                                            <form:input type="text" class="form-control" name="captchaName" placeholder="Captcha ismi giriniz" path="captchaName"/>
+                                            <form:errors path="captchaName" cssClass="error" />
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <label class="control-label col-form-label">Kategori</label>
-                                            <input type="text" class="form-control" name="captchaCategory" placeholder="Kategori giriniz">
+                                            <form:label class="control-label col-form-label" path="captchaCategory">Kategori</form:label>
+                                            <form:input type="text" class="form-control" name="captchaCategory" placeholder="Kategori giriniz" path="captchaCategory" />
+                                            <form:errors path="captchaCategory" cssClass="error" />
                                         </div>
                                     </div>
 
@@ -144,13 +153,12 @@
                             <hr>
                             <div class="card-body">
                                 <div class="d-flex no-block align-items-center">
-                                    <div class="action-form">
-                                        <div class="form-group m-b-0 text-center">
-                                            <button type="submit" class="btn btn-info waves-effect waves-light">Save</button>
-                                            <button type="submit" class="btn btn-dark waves-effect waves-light">Cancel</button>
-                                        </div>
-                                    </div>
-                                    </div>
+                                    <a class="action-form">
+                                        <a class="form-group m-b-0 text-center">
+                                            <button type="submit" class="btn btn-info waves-effect waves-light">Kaydet</button>
+                                            <button type="reset" class="btn btn-dark waves-effect waves-light">İptal</button>
+                                        </a>
+                                    </a>
                                 </div>
                             </div>
                         </form:form>

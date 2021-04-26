@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tr.edu.duzce.mf.bm470.captcha.dao.CaptchaDao;
 import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 import tr.edu.duzce.mf.bm470.captcha.utils.ImageUtils;
@@ -23,23 +24,18 @@ public class CaptchaServiceImpl implements CaptchaService {
     private CaptchaDao captchaDao;
 
     @Override
-    public void saveCaptcha(Captcha captcha) {
-        captchaDao.saveCaptcha(captcha);
-
-    }
-
-    @Override
     public List<CaptchaDto> findAll() {
         List<Captcha> listCaptcha = captchaDao.findAll();
         List<CaptchaDto> captchaDtos = listCaptcha.stream().map(captcha -> {
             List<ImageWrapperDto> dtos = captcha.getImageWrappers().stream().map(image -> {
                 ImageWrapperDto dto = null;
+
                 try {
                     dto = ImageWrapperDto.builder()
                             .id(image.getId())
                             .name(image.getName())
                             .base(ImageUtils.getImgUtility(image.getData()))
-                            .isValid(image.isValid())
+                            .valid(image.isValid())
                             .build();
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
@@ -59,12 +55,6 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     @Override
-    public CaptchaDto getCaptcha() {
-        CaptchaDto captchaDto = findAll().get(0);
-        return captchaDto;
-    }
-
-    @Override
     public CaptchaDto findById(Long id) {
         Captcha captcha = captchaDao.findById(id);
 
@@ -72,11 +62,11 @@ public class CaptchaServiceImpl implements CaptchaService {
             ImageWrapperDto imageWrapperDto = null;
             try{
                 imageWrapperDto = ImageWrapperDto.builder()
-                                    .id(image.getId())
-                                    .name(image.getName())
-                                    .base(ImageUtils.getImgUtility(image.getData()))
-                                    .isValid(image.isValid())
-                                    .build();
+                        .id(image.getId())
+                        .name(image.getName())
+                        .base(ImageUtils.getImgUtility(image.getData()))
+                        .valid(image.isValid())
+                        .build();
             }catch (UnsupportedEncodingException e){
                 e.printStackTrace();
             }
@@ -94,8 +84,41 @@ public class CaptchaServiceImpl implements CaptchaService {
     }
 
     @Override
-    public void deleteCaptcha(Captcha captcha) {
-         captchaDao.deleteCaptcha(captcha);
+    public CaptchaDto getCaptcha() {
+        CaptchaDto captchaDto = findAll().get(0);
+        return captchaDto;
+    }
+
+    @Override
+    public GeneralResponse save(Captcha captcha) {
+        GeneralResponse generalResponse = new GeneralResponse();
+        try {
+            captchaDao.save(captcha);
+            generalResponse.setResult(0);
+        }catch (Exception e){
+            generalResponse.setMessage("Ekleme İşlemi Başarısız...");
+            generalResponse.setResult(1);
+        }
+
+        return  generalResponse;
+
+    }
+
+    @Override
+    public GeneralResponse delete(long captchaId) {
+        GeneralResponse generalResponse = new GeneralResponse();
+        Captcha captcha = Captcha.builder()
+                .id(captchaId)
+                .build();
+        try {
+            captchaDao.delete(captcha);
+            generalResponse.setMessage("Silme İşlemi Başarılı...");
+            generalResponse.setResult(0);
+        }catch (Exception e) {
+            generalResponse.setMessage("Silme İşlemi Başarısız...");
+            generalResponse.setResult(1);
+        }
+        return generalResponse;
     }
 }
 

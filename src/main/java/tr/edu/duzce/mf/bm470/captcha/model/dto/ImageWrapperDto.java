@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 
 @Data
 @NoArgsConstructor
@@ -13,5 +14,8 @@ public class ImageWrapperDto {
     private long id;
     private String name;
     private String base;
-    private boolean isValid;
+    private boolean valid;
+    private long captchaId;
+
+
 }

@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface CaptchaDao {
 
-    void saveCaptcha(Captcha captcha);
-
     List<Captcha> findAll();
 
     Captcha findById(Long id);
 
-    void deleteCaptcha(Captcha captcha);
+    void save(Captcha captcha);
+
+    void delete(Captcha captcha);
 }

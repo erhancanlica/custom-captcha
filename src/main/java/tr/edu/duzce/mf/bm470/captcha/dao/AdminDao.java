@@ -6,6 +6,8 @@ import tr.edu.duzce.mf.bm470.captcha.model.Users;
 import java.util.List;
 
 public interface AdminDao {
+
     Admins findByUser(Users user);
+
     List<Users> getByUsers();
 }

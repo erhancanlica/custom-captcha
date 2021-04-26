@@ -1,11 +1,12 @@
 package tr.edu.duzce.mf.bm470.captcha.service;
 
 import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
-import java.util.List;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
+
 
 public interface ImageService {
-    void saveImage(ImageWrapper imageWrapper);
 
-    List<ImageWrapper> findAll();
+    GeneralResponse save(ImageWrapper imageWrapper);
 
+    GeneralResponse merge(ImageWrapper imageWrapper);
 }
