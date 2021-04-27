@@ -88,7 +88,7 @@
 
                             <div class="form-group text-center">
                                 <div class="col-xs-12 p-b-20">
-                                    <input class="btn btn-block btn-lg btn-info" type="submit" value="Giriş"/>
+                                    <input id="submit" class="btn btn-block btn-lg btn-info" type="submit" value="Giriş"/>
                                 </div>
                             </div>
                         </form>
@@ -215,6 +215,26 @@
                 }
             })
         })
+        $("#submit").click((e) => {
+
+            $.ajax({
+                type:"post",
+                url: "isCaptcha",
+                data:selectedImages,
+                success:(response)=>{
+                    console.log(response)
+
+                },
+                error:(err)=>{
+                    console.log(err)
+                }
+            })
+
+        })
+
+
+
+
     })
 
 </script>

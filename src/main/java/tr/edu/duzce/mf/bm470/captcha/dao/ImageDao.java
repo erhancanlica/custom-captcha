@@ -11,4 +11,10 @@ public interface ImageDao {
     void save(ImageWrapper imageWrapper);
 
     void merge(ImageWrapper imageWrapper);
+
+
+
+    ImageWrapper findById(Long id);
+
+
 }

@@ -4,9 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
+import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
+import tr.edu.duzce.mf.bm470.captcha.model.Users;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaToken;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
+import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
+import tr.edu.duzce.mf.bm470.captcha.service.Impl.ImageServiceImpl;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -21,6 +28,8 @@ public class SessionController {
 
     @Autowired
     private CaptchaService captchaService;
+    @Autowired
+    private ImageService imageService;
 
     @GetMapping("/loginAdmin")
     public ModelAndView index(@RequestParam(value = "error", required = false) final String error,
@@ -54,8 +63,32 @@ public class SessionController {
 
     @PostMapping(value = "/validate",consumes = "application/json")
     @ResponseBody
-    public boolean validate(@RequestBody List<CaptchaDto> captchaDtos,HttpSession session){
-        return true;
+    public GeneralResponse validate(@RequestBody List<ImageWrapper> imageWrappers, HttpSession session){
+
+        GeneralResponse response=imageService.validate(imageWrappers);
+        if (response.getResult()==0){
+            CaptchaToken captchaToken=(CaptchaToken) session.getAttribute("capthcaToken");
+            captchaToken.setValidate(true);
+            session.setAttribute("capthcaToken",captchaToken);
+        }
+
+        return response;
+    }
+
+
+    @PostMapping(value = "/login")
+    @ResponseBody
+    public GeneralResponse isCaptcha(@RequestBody Users user, HttpSession httpSession){
+        CaptchaToken captchaToken=(CaptchaToken) httpSession.getAttribute("capthcaToken");
+        if (captchaToken.isValidate()){
+            ///işlem yap
+        }
+        else {
+            /// işlem yapma
+        }
+        GeneralResponse generalResponse=new GeneralResponse();
+
+        return generalResponse;
     }
 
 }

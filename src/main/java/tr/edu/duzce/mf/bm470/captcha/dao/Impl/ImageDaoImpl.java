@@ -6,6 +6,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import tr.edu.duzce.mf.bm470.captcha.dao.ImageDao;
+import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
 
 import javax.persistence.criteria.*;
@@ -26,4 +27,21 @@ public class ImageDaoImpl implements ImageDao {
         Session session = sessionFactory.getCurrentSession();
         session.merge(imageWrapper);
     }
+    @Override
+    public ImageWrapper findById(Long id){
+        Session session = sessionFactory.getCurrentSession();
+        ImageWrapper image = null;
+
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<ImageWrapper> criteriaQuery = criteriaBuilder.createQuery(ImageWrapper.class);
+        Root<ImageWrapper> root = criteriaQuery.from(ImageWrapper.class);
+        Predicate predicateId = criteriaBuilder.equal(root.get("id"), id);
+        criteriaQuery.select(root).where(predicateId);
+        Query<ImageWrapper> captchaQuery = session.createQuery(criteriaQuery);
+        image = captchaQuery.getSingleResult();
+
+        return image;
+    }
+
+
 }
