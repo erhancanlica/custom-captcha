@@ -14,6 +14,7 @@
     <title>Login</title>
     <!-- Custom CSS -->
     <link href="/resources/css/style.min.css" rel="stylesheet">
+    <link href="../../../resources/css/toastr.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -28,6 +29,9 @@
         .selected-image{border-style: solid;border-color: green; }
         a{cursor: pointer}
 
+        .hidden{
+            display: none!important;
+        }
 
 
     </style>
@@ -60,10 +64,16 @@
                         <span>${msg}</span>
                     </div>
                 </c:if>
+                <c:if test="${not empty captchaErr}">
+                    <div class="alert alert-danger">
+                        <button class="close" data-close="alert"></button>
+                        <span>${captchaErr}</span>
+                    </div>
+                </c:if>
                 <!-- Form -->
                 <div class="row">
                     <div class="col-12">
-                        <form class="form-horizontal m-t-20" action="/user/process_login" method='POST'>
+                        <form class="form-horizontal m-t-20" action="/userLogin" method='POST'>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><i class="ti-user"></i></span>
@@ -78,11 +88,16 @@
                                 <input type="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" name='password'>
                             </div>
 
-                            <div class="form-group text-center">
+                            <div id="openCaptchaDiv" class="form-group text-center">
                                 <div class="col-xs-12 p-b-20">
-                                    <button id="openCaptcha" type="button" class="btn btn-primary">
-                                        Launch demo modal
+                                    <button id="openCaptcha" type="button" class="btn btn-primary float-left mb-3">
+                                        Doğrula
                                     </button>
+                                </div>
+                            </div>
+                            <div id="validDiv" class="form-group text-center hidden">
+                                <div class="col-xs-12 p-b-20">
+                                    <p class="alert alert-success">Giriş Yapabilirsiniz</p>
                                 </div>
                             </div>
 
@@ -106,7 +121,7 @@
                     <button type="button" class="close " data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <div style="width: 360px ;background-color: red ;padding-left: 5px;padding-top: 5px; " >
+                    <div style="width: 360px ;padding-left: 5px;padding-top: 5px; " >
                         <h2 class="modal-title text-capitalize text-primary" id="exampleModalLongTitle">${captcha.captchaCategory}</h2>
                         <div><h4>içeren fotoğrafları seçiniz.</h4></div>
                     </div>
@@ -152,6 +167,7 @@
 <!-- Bootstrap tether Core JavaScript -->
 <script src="/resources/js/popper.min.js"></script>
 <script src="/resources/js/bootstrap.min.js"></script>
+<script src="/resources/js/toastr.js"></script>
 
 <script>
     var selectedImages= [];
@@ -175,7 +191,8 @@
                 selectedImages.splice(index, 1);
                 $(this).removeClass("selected-image");
             } else {
-                captcha["captchaId"] = +this.id;
+                captcha["id"] = +this.id;
+                captcha["captchaId"] = +"${captcha.captchaId}";
                 selectedImages.push(captcha);
                 $(this).addClass("selected-image");
             }
@@ -184,7 +201,7 @@
 
         function getIndex(id){
             var index = selectedImages.findIndex(function(element){
-                return element.captchaId === id;
+                return element.id === id;
             });
             return index;
         }
@@ -200,41 +217,21 @@
                 contentType: "application/json;charset=UTF-8",
 
                 success: function(response) {
-                    // if(response.result == 0){
-                    //     toastr.success(response.message)
-                    //     setTimeout(function(){
-                    //         location.reload()
-                    //     },500)
-                    // }
-                    // else {
-                    //     toastr.error(response.message)
-                    // }
+                    if(response.result == 0){
+                        toastr.success(response.message)
+                        $('#captchaModal').modal('toggle');
+                        $('#openCaptchaDiv').html("");
+                        $('#validDiv').removeClass("hidden")
+                    }
+                    else {
+                        toastr.error(response.message)
+                    }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     // toastr.error("Bilinmeyen Bir Hata oluştu")
                 }
             })
         })
-        $("#submit").click((e) => {
-
-            $.ajax({
-                type:"post",
-                url: "isCaptcha",
-                data:selectedImages,
-                success:(response)=>{
-                    console.log(response)
-
-                },
-                error:(err)=>{
-                    console.log(err)
-                }
-            })
-
-        })
-
-
-
-
     })
 
 </script>

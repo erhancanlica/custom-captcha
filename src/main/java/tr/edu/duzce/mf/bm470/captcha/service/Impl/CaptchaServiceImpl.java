@@ -85,7 +85,7 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public CaptchaDto getCaptcha() {
-        CaptchaDto captchaDto = findAll().get(0);
+        CaptchaDto captchaDto = findAll().get(3);
         return captchaDto;
     }
 

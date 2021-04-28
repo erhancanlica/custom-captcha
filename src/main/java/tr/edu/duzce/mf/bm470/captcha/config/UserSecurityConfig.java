@@ -46,14 +46,14 @@ public class UserSecurityConfig  extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .antMatcher("/user/**")
-                .authorizeRequests().anyRequest().authenticated()
+                .authorizeRequests().anyRequest().hasRole("CLIENT")
                 .and().formLogin()
                 .loginPage("/loginUser")
-                .loginProcessingUrl("/user/process_login")
+                .loginProcessingUrl("/userLogin")
                 .permitAll()
                 .successHandler(customSuccessHandler)
                 .failureUrl("/loginUser?error=true")
                 .and()
-                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/loginUser?logout=true").permitAll();
+                .logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")).logoutSuccessUrl("/loginUser?logout=true").permitAll();
     }
 }

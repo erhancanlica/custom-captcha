@@ -1,7 +1,9 @@
 package tr.edu.duzce.mf.bm470.captcha.dao.Impl;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -28,17 +30,20 @@ public class ImageDaoImpl implements ImageDao {
         session.merge(imageWrapper);
     }
     @Override
-    public ImageWrapper findById(Long id){
+    public List<ImageWrapper> findByCaptchaId(Long id){
         Session session = sessionFactory.getCurrentSession();
-        ImageWrapper image = null;
-
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<ImageWrapper> criteriaQuery = criteriaBuilder.createQuery(ImageWrapper.class);
-        Root<ImageWrapper> root = criteriaQuery.from(ImageWrapper.class);
-        Predicate predicateId = criteriaBuilder.equal(root.get("id"), id);
-        criteriaQuery.select(root).where(predicateId);
+        Root<ImageWrapper> imageRoot = criteriaQuery.from(ImageWrapper.class);
+
+        Predicate predicateCaptcha = criteriaBuilder.equal(imageRoot.get("captcha").get("id"),id);
+        Predicate predicateValid = criteriaBuilder.equal(imageRoot.get("isValid"), true);
+        Predicate predicateJoin = criteriaBuilder.and(predicateCaptcha, predicateValid);
+
+        criteriaQuery.select(imageRoot).where(predicateJoin);
+        criteriaQuery.distinct(true);
         Query<ImageWrapper> captchaQuery = session.createQuery(criteriaQuery);
-        image = captchaQuery.getSingleResult();
+        List<ImageWrapper> image = captchaQuery.getResultList();
 
         return image;
     }

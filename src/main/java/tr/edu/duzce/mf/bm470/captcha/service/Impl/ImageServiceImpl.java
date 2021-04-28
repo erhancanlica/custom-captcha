@@ -6,10 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import tr.edu.duzce.mf.bm470.captcha.dao.ImageDao;
 import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
+import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
 
 import java.awt.*;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import static java.util.Objects.nonNull;
 @Transactional
 @Service
@@ -49,35 +52,28 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public GeneralResponse validate(List<ImageWrapper> imageWrappers) {
+    public GeneralResponse validate(List<ImageWrapperDto> imageWrappers) {
 
-        GeneralResponse generalResponse=new GeneralResponse();
+        GeneralResponse generalResponse= GeneralResponse
+                .builder()
+                .result(1)
+                .message("Yanlış Captcha seçimi yaptınız.").build();
 
         try{
             if (nonNull(imageWrappers) && imageWrappers.size()==6){
-                boolean valid=true;
-                for (ImageWrapper image:imageWrappers) {
-                    ImageWrapper imageWrapper =imageDao.findById(image.getId());
-                    if (!imageWrapper.isValid()){
-                        valid=false;
-                        break;
-                    }
-                }
+                List<ImageWrapper> trueImageList =imageDao.findByCaptchaId(imageWrappers.get(0).getCaptchaId());
 
+                boolean valid = imageWrappers.stream()
+                        .map(ImageWrapperDto::getId)
+                        .collect(Collectors.toList()).stream().allMatch(id -> trueImageList.stream()
+                                .map(ImageWrapper::getId)
+                                .collect(Collectors.toList())
+                                .contains(id));
                if (valid){
                    generalResponse.setMessage("Captcha seçme işlemi başarılı.");
                    generalResponse.setResult(0);
                }
-               else {
-                   generalResponse.setMessage("Yanlış Captcha seçimi yaptınız.");
-                   generalResponse.setResult(1);
-               }
 
-
-            }
-            else {
-                generalResponse.setMessage("Lütfen altı fotoğraf seçiniz.");
-                generalResponse.setResult(1);
             }
         }
         catch (Exception e){

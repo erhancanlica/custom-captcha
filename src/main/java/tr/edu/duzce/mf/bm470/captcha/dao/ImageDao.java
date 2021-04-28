@@ -14,7 +14,7 @@ public interface ImageDao {
 
 
 
-    ImageWrapper findById(Long id);
+    List<ImageWrapper> findByCaptchaId(Long id);
 
 
 }
