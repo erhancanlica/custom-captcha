@@ -47,7 +47,7 @@ public class SessionController {
 
     @GetMapping("/loginAdmin")
     public ModelAndView index(@RequestParam(value = "error", required = false) final String error,
-                              @RequestParam(value = "logout", required = false) final String logout){
+                              @RequestParam(value = "logout", required = false) final String logout) {
         ModelAndView modelAndView = new ModelAndView(MY_LOGIN_VIEW);
         if (nonNull(error)) {
             modelAndView.addObject("error", "Kullanıcı adı veya şifre hatalı");
@@ -62,8 +62,8 @@ public class SessionController {
     public ModelAndView loginUser(@RequestParam(value = "error", required = false) final String error,
                                   @RequestParam(value = "logout", required = false) final String logout,
                                   @RequestParam(value = "captchaErr", required = false) final String captchaErr,
-                                  HttpSession session){
-        String randomid= UUID.randomUUID().toString();
+                                  HttpSession session) {
+        String randomid = UUID.randomUUID().toString();
         session.setAttribute("capthcaToken", CaptchaToken.builder().token(randomid).build());
         ModelAndView modelAndView = new ModelAndView("login/loginUser");
         if (nonNull(error)) {
@@ -75,47 +75,46 @@ public class SessionController {
         if (nonNull(captchaErr)) {
             modelAndView.addObject("captchaErr", "Captcha Hatalı");
         }
-        modelAndView.addObject("captcha",captchaService.getCaptcha());
+        modelAndView.addObject("captcha", captchaService.getCaptcha());
         return modelAndView;
     }
 
-    @PostMapping(value = "/validate",consumes = "application/json")
+    @PostMapping(value = "/validate", consumes = "application/json")
     @ResponseBody
-    public GeneralResponse validate(@RequestBody List<ImageWrapperDto> imageWrappers, HttpSession session){
+    public GeneralResponse validate(@RequestBody List<ImageWrapperDto> imageWrappers, HttpSession session) {
 
-        GeneralResponse response=imageService.validate(imageWrappers);
-        if (response.getResult()==0){
-            CaptchaToken captchaToken=(CaptchaToken) session.getAttribute("capthcaToken");
+        GeneralResponse response = imageService.validate(imageWrappers);
+        if (response.getResult() == 0) {
+            CaptchaToken captchaToken = (CaptchaToken) session.getAttribute("capthcaToken");
             captchaToken.setValidate(true);
-            session.setAttribute("capthcaToken",captchaToken);
+            session.setAttribute("capthcaToken", captchaToken);
         }
 
         return response;
     }
 
 
-        @PostMapping(value = "/userLogin")
-        public ModelAndView login(HttpServletRequest httpServletRequest, @RequestParam String username, @RequestParam String password, HttpSession httpSession){
-            CaptchaToken captchaToken=(CaptchaToken) httpSession.getAttribute("capthcaToken");
-            if (captchaToken.isValidate()){
-                UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
-                try {
-                    Authentication auth = authManager.authenticate(authReq);
-                    final User user = (User) auth.getPrincipal();
-                    final Users dbUser = userService.findByUserName(user.getUsername());
-                    SecurityContext sc = SecurityContextHolder.getContext();
-                    sc.setAuthentication(auth);
-                    httpSession.setAttribute(Constants.userInfoKey,dbUser);
-                    httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-                } catch (Exception ex){
-                    return new ModelAndView("redirect:/loginUser?error=true");
-                }
+    @PostMapping(value = "/userLogin")
+    public ModelAndView login(HttpServletRequest httpServletRequest, @RequestParam String username, @RequestParam String password, HttpSession httpSession) {
+        CaptchaToken captchaToken = (CaptchaToken) httpSession.getAttribute("capthcaToken");
+        if (captchaToken.isValidate()) {
+            UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
+            try {
+                Authentication auth = authManager.authenticate(authReq);
+                final User user = (User) auth.getPrincipal();
+                final Users dbUser = userService.findByUserName(user.getUsername());
+                SecurityContext sc = SecurityContextHolder.getContext();
+                sc.setAuthentication(auth);
+                httpSession.setAttribute(Constants.userInfoKey, dbUser);
+                httpSession.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+            } catch (Exception ex) {
+                return new ModelAndView("redirect:/loginUser?error=true");
+            }
 
-                return new ModelAndView("redirect:user/userIndex");
-            }
-            else {
-                return new ModelAndView("redirect:/loginUser?captchaErr=err");
-            }
+            return new ModelAndView("redirect:user/userIndex");
+        } else {
+            return new ModelAndView("redirect:/loginUser?captchaErr=err");
+        }
     }
 
 }

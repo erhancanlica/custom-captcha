@@ -35,14 +35,14 @@ public class AdminController {
     private CaptchaService captchaService;
 
     @GetMapping
-    public ModelAndView index(){
+    public ModelAndView index() {
         ModelAndView modelAndView = new ModelAndView("admin/index");
         return modelAndView;
     }
 
 
     @GetMapping("/list")
-    public ModelAndView getByUsers(final Model model){
+    public ModelAndView getByUsers(final Model model) {
         final ModelAndView modelAndView = new ModelAndView("admin/list");
         List<CaptchaDto> captchaDtos = captchaService.findAll();
         modelAndView.addObject("captchas", captchaDtos);
@@ -52,7 +52,7 @@ public class AdminController {
 
 
     @GetMapping("/create")
-    public ModelAndView getCaptchaForm(@RequestParam(value = "lengthErr", required = false) String lengthErr){
+    public ModelAndView getCaptchaForm(@RequestParam(value = "lengthErr", required = false) String lengthErr) {
         ModelAndView modelAndView = new ModelAndView("admin/create");
         return modelAndView;
     }
@@ -69,51 +69,59 @@ public class AdminController {
             return "create";
         } else {
 
-        GeneralResponse generalResponse = new GeneralResponse();
+            GeneralResponse generalResponse = new GeneralResponse();
 
-        Captcha captcha = new Captcha();
-        captcha.setName(captchaDto.getCaptchaName());
-        captcha.setCategory(captchaDto.getCaptchaCategory());
-        generalResponse = captchaService.save(captcha);
-
-
-        if (!Objects.equals(trueImages[0].getOriginalFilename(), "")){
-            int i = 0;
-            for (MultipartFile aFile : trueImages){
-                i++;
-                System.out.println("Saving file: " + aFile.getOriginalFilename());
-
-                ImageWrapper trueImage = new ImageWrapper();
-                trueImage.setName("file"+i);
-                trueImage.setData(aFile.getBytes());
-                trueImage.setCaptcha(captcha);
-                trueImage.setValid(true);
-                generalResponse = imageService.save(trueImage);
+            if (captchaDto.getCaptchaName().equals("") || captchaDto.getCaptchaCategory().equals("")) {
+                return "redirect:/admin/create";
             }
-        }
 
-        if (!Objects.equals(falseImages[0].getOriginalFilename(), "")){
-            int i = 0;
-            for (MultipartFile aFile : falseImages){
-                i++;
-                System.out.println("Saving file: " + aFile.getOriginalFilename());
-
-                ImageWrapper falseImage = new ImageWrapper();
-                falseImage.setName("file"+i);
-                falseImage.setData(aFile.getBytes());
-                falseImage.setCaptcha(captcha);
-                falseImage.setValid(false);
-                generalResponse = imageService.save(falseImage);
+            if (trueImages.length !=6 || falseImages.length !=3) {
+                return "redirect:/admin/create";
             }
-        }
-        return "redirect:/admin/list";
+
+
+            Captcha captcha = new Captcha();
+            captcha.setName(captchaDto.getCaptchaName());
+            captcha.setCategory(captchaDto.getCaptchaCategory());
+            generalResponse = captchaService.save(captcha);
+
+
+            if (!Objects.equals(trueImages[0].getOriginalFilename(), "")) {
+                int i = 0;
+                for (MultipartFile aFile : trueImages) {
+                    i++;
+                    System.out.println("Saving file: " + aFile.getOriginalFilename());
+
+                    ImageWrapper trueImage = new ImageWrapper();
+                    trueImage.setName("file" + i);
+                    trueImage.setData(aFile.getBytes());
+                    trueImage.setCaptcha(captcha);
+                    trueImage.setValid(true);
+                    generalResponse = imageService.save(trueImage);
+                }
+            }
+
+            if (!Objects.equals(falseImages[0].getOriginalFilename(), "")) {
+                int i = 0;
+                for (MultipartFile aFile : falseImages) {
+                    i++;
+                    System.out.println("Saving file: " + aFile.getOriginalFilename());
+
+                    ImageWrapper falseImage = new ImageWrapper();
+                    falseImage.setName("file" + i);
+                    falseImage.setData(aFile.getBytes());
+                    falseImage.setCaptcha(captcha);
+                    falseImage.setValid(false);
+                    generalResponse = imageService.save(falseImage);
+                }
+            }
+            return "redirect:/admin/list";
         }
     }
 
 
-
     @PostMapping("/findById/{captchaId}")
-    public ModelAndView findById(@PathVariable long captchaId, HttpSession httpSession){
+    public ModelAndView findById(@PathVariable long captchaId, HttpSession httpSession) {
         ModelAndView modelAndView = new ModelAndView("content/image");
         CaptchaDto captchaDto = captchaService.findById(captchaId);
         modelAndView.addObject("captcha", captchaDto);
@@ -123,7 +131,7 @@ public class AdminController {
 
     @PutMapping("/merge")
     @ResponseBody
-    public GeneralResponse merge(String image, @RequestParam(required = false) MultipartFile file , HttpSession httpSession){
+    public GeneralResponse merge(String image, @RequestParam(required = false) MultipartFile file, HttpSession httpSession) {
 
         ImageWrapper imageWrapper = null;
 
@@ -152,9 +160,9 @@ public class AdminController {
 
     @DeleteMapping("/delete/{captchaId}")
     @ResponseBody
-    public GeneralResponse delete(@PathVariable long captchaId, HttpSession httpSession){
+    public GeneralResponse delete(@PathVariable long captchaId, HttpSession httpSession) {
         GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse =   captchaService.delete(captchaId);
+        generalResponse = captchaService.delete(captchaId);
         return generalResponse;
     }
 

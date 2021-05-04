@@ -1,3 +1,2 @@
 INSERT INTO users (`password`, `user_type`, `user_name`) VALUES ('$2a$10$Anzq3AwyJYPz7lIIG/HOwetHeMQijqPmKroWjvO1OFseER5I.pEwi', 'ADMIN', 'admin');
 INSERT INTO admin (`adminName`, `UserID`) VALUES ('volkan', '1');
-

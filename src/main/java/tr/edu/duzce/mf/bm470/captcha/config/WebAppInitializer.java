@@ -14,7 +14,7 @@ import javax.servlet.ServletRegistration;
 
 public class WebAppInitializer implements WebApplicationInitializer {
 
-    private static final String LOCATION = "E:/temp/";
+    private static final String LOCATION = "C:/temp/";
 
     private static final long MAX_FILE_SIZE = 1024 * 1024 * 3;//3MB
 
@@ -25,7 +25,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext applicationContext = getContext();
-        applicationContext.register(UserSecurityConfig.class,AdminSecurityConfig.class);
+        applicationContext.register(UserSecurityConfig.class, AdminSecurityConfig.class);
         ServletRegistration.Dynamic dispatcherServlet = servletContext.addServlet("DispatcherServlet", new DispatcherServlet(applicationContext));
         servletContext.addListener(new ContextLoaderListener(applicationContext));
         servletContext.addFilter("securityFilter", new DelegatingFilterProxy("springSecurityFilterChain"))
@@ -39,18 +39,17 @@ public class WebAppInitializer implements WebApplicationInitializer {
         characterEncodingFilter.setEncoding("UTF-8");
         characterEncodingFilter.setForceEncoding(true);
         servletContext.addFilter("characterEncodingFilter", characterEncodingFilter)
-                                .addMappingForUrlPatterns(null, false, "/*");
+                .addMappingForUrlPatterns(null, false, "/*");
     }
 
-    private AnnotationConfigWebApplicationContext getContext(){
+    private AnnotationConfigWebApplicationContext getContext() {
         AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext();
         applicationContext.setConfigLocation("tr.edu.duzce.mf.bm470.captcha.config");
         return applicationContext;
     }
-    private MultipartConfigElement getMultipartConfigElement(){
+
+    private MultipartConfigElement getMultipartConfigElement() {
         MultipartConfigElement multipartConfigElement = new MultipartConfigElement(LOCATION, MAX_FILE_SIZE, MAX_REQUEST_SIZE, FILE_SIZE_THRESHOLD);
         return multipartConfigElement;
     }
-
-
 }
