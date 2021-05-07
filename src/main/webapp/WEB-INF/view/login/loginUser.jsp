@@ -106,11 +106,6 @@
                                     <input id="submit" class="btn btn-block btn-lg btn-info" type="submit" value="Giriş"/>
                                 </div>
                                 <br>
-                                <!--
-                                <div>
-                                    <a href="/loginAdmin" class="btn btn-info btn-rounded waves-effect waves-light m-b-40">Admin</a>
-                                </div>
-                                -->
                             </div>
                         </form>
                     </div>

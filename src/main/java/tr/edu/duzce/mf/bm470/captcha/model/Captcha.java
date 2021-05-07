@@ -27,6 +27,9 @@ public class Captcha {
     @Size(min = 2, max = 20, message = "2-20 harf arasında olmalıdır")
     private String name;
 
+    @Column(name = "status")
+    private boolean status;
+
     @Column(name = "category")
     @NotNull(message = "kategori kısmı boş bırakılamaz")
     private String category;

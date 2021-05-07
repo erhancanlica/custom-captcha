@@ -16,6 +16,7 @@ import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
+import tr.edu.duzce.mf.bm470.captcha.utils.CommonUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -166,5 +167,8 @@ public class AdminController {
         return generalResponse;
     }
 
-
+    @PostMapping("cache/refresh")
+    public void cacheRefresh(){
+        CommonUtils.setCaptchaIds(captchaService.findAllCaptchaIds());
+    }
 }

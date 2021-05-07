@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
 import tr.edu.duzce.mf.bm470.captcha.model.Users;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaToken;
@@ -18,9 +19,11 @@ import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
 import tr.edu.duzce.mf.bm470.captcha.service.UserService;
+import tr.edu.duzce.mf.bm470.captcha.utils.CommonUtils;
 import tr.edu.duzce.mf.bm470.captcha.utils.Constants;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -29,7 +32,7 @@ import java.util.UUID;
 import static java.util.Objects.nonNull;
 
 @Controller
-public class SessionController {
+public class SessionController implements ServletContextAware {
 
     private static final String MY_LOGIN_VIEW = "login/loginAdmin";
 
@@ -117,4 +120,9 @@ public class SessionController {
         }
     }
 
+    @Override
+    public void setServletContext(ServletContext servletContext) {
+        List<Long> captchaIds = captchaService.findAllCaptchaIds();
+        CommonUtils.setCaptchaIds(captchaIds);
+    }
 }

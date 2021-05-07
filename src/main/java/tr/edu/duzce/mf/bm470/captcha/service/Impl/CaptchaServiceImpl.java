@@ -9,6 +9,7 @@ import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
+import tr.edu.duzce.mf.bm470.captcha.utils.CommonUtils;
 import tr.edu.duzce.mf.bm470.captcha.utils.ImageUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -85,7 +86,8 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public CaptchaDto getCaptcha() {
-        CaptchaDto captchaDto = findAll().get(3);
+        Random rand = new Random();
+        CaptchaDto captchaDto = findById(CommonUtils.getCaptchaIds().get(rand.nextInt(CommonUtils.getCaptchaIds().size())));
         return captchaDto;
     }
 
@@ -119,6 +121,11 @@ public class CaptchaServiceImpl implements CaptchaService {
             generalResponse.setResult(1);
         }
         return generalResponse;
+    }
+
+    @Override
+    public List<Long> findAllCaptchaIds() {
+        return captchaDao.findAllCaptchaIds();
     }
 }
 

@@ -17,4 +17,6 @@ public interface CaptchaService {
     CaptchaDto findById(Long id);
 
     GeneralResponse delete(long captchaId);
+
+    List<Long> findAllCaptchaIds();
 }

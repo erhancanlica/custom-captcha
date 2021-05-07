@@ -59,4 +59,16 @@ public class CaptchaDaoImpl implements CaptchaDao {
             session.delete(persistentInstance);
         }
     }
+
+    @Override
+    public List<Long> findAllCaptchaIds() {
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
+        Root<Captcha> root = criteriaQuery.from(Captcha.class);
+        Predicate predicateValid = criteriaBuilder.equal(root.get("status"), true);
+        criteriaQuery.select(root.get("id")).where(predicateValid);
+        Query<Long> query = session.createQuery(criteriaQuery);
+        return query.getResultList();
+    }
 }

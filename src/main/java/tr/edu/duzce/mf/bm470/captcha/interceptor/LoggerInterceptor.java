@@ -1,8 +1,8 @@
 package tr.edu.duzce.mf.bm470.captcha.interceptor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import com.google.common.base.Strings;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +99,7 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 
         final String ip = request.getHeader("X-FORWARDED-FOR");
         final String ipAddr = (ip == null) ? getRemoteAddr(request) : ip;
-        if (!Strings.isNullOrEmpty(ipAddr)) {
+        if (StringUtils.isNotEmpty(ipAddr)) {
             posted.append("&_psip=" + ipAddr);
         }
 

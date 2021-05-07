@@ -14,4 +14,6 @@ public interface CaptchaDao {
     void save(Captcha captcha);
 
     void delete(Captcha captcha);
+
+    List<Long> findAllCaptchaIds();
 }
