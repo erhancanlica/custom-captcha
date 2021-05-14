@@ -61,6 +61,9 @@
                 <!-- ============================================================== -->
                 <!-- Messages -->
                 <!-- ============================================================== -->
+                    <c:if test="${sessionInfo.user.userType eq 'ADMIN'}">
+                        <button id="cache" class="btn btn-danger" style="margin-right: 20px;">Cache Yenile</button>
+                    </c:if>
 
                 <!-- ============================================================== -->
                 <!-- End Messages -->

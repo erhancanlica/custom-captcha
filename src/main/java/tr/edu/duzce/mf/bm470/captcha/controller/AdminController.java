@@ -1,6 +1,7 @@
 package tr.edu.duzce.mf.bm470.captcha.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +18,7 @@ import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
 import tr.edu.duzce.mf.bm470.captcha.utils.CommonUtils;
+import tr.edu.duzce.mf.bm470.captcha.utils.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -55,6 +57,8 @@ public class AdminController {
     @GetMapping("/create")
     public ModelAndView getCaptchaForm(@RequestParam(value = "lengthErr", required = false) String lengthErr) {
         ModelAndView modelAndView = new ModelAndView("admin/create");
+        if(StringUtils.isNotEmpty(lengthErr))
+            modelAndView.addObject("lengthErr","Doğru resimlerin sayısı 6 ve yanlış resimlerin sayısı 3 olmalıdır." );
         return modelAndView;
     }
 
@@ -65,59 +69,51 @@ public class AdminController {
                        @RequestParam("falseImages") MultipartFile[] falseImages,
                        BindingResult bindingResult) throws Exception {
 
-
-        if (bindingResult.hasErrors()) {
-            return "create";
-        } else {
-
-            GeneralResponse generalResponse = new GeneralResponse();
-
-            if (captchaDto.getCaptchaName().equals("") || captchaDto.getCaptchaCategory().equals("")) {
-                return "redirect:/admin/create";
-            }
-
-            if (trueImages.length !=6 || falseImages.length !=3) {
-                return "redirect:/admin/create";
-            }
-
-
-            Captcha captcha = new Captcha();
-            captcha.setName(captchaDto.getCaptchaName());
-            captcha.setCategory(captchaDto.getCaptchaCategory());
-            generalResponse = captchaService.save(captcha);
-
-
-            if (!Objects.equals(trueImages[0].getOriginalFilename(), "")) {
-                int i = 0;
-                for (MultipartFile aFile : trueImages) {
-                    i++;
-                    System.out.println("Saving file: " + aFile.getOriginalFilename());
-
-                    ImageWrapper trueImage = new ImageWrapper();
-                    trueImage.setName("file" + i);
-                    trueImage.setData(aFile.getBytes());
-                    trueImage.setCaptcha(captcha);
-                    trueImage.setValid(true);
-                    generalResponse = imageService.save(trueImage);
-                }
-            }
-
-            if (!Objects.equals(falseImages[0].getOriginalFilename(), "")) {
-                int i = 0;
-                for (MultipartFile aFile : falseImages) {
-                    i++;
-                    System.out.println("Saving file: " + aFile.getOriginalFilename());
-
-                    ImageWrapper falseImage = new ImageWrapper();
-                    falseImage.setName("file" + i);
-                    falseImage.setData(aFile.getBytes());
-                    falseImage.setCaptcha(captcha);
-                    falseImage.setValid(false);
-                    generalResponse = imageService.save(falseImage);
-                }
-            }
-            return "redirect:/admin/list";
+        if (captchaDto.getCaptchaName().equals("") || captchaDto.getCaptchaCategory().equals("")) {
+            return "redirect:/admin/create";
         }
+
+        if (trueImages.length != 6 || falseImages.length != 3) {
+            return "redirect:/admin/create?lengthErr=true";
+        }
+
+        Captcha captcha = new Captcha();
+        captcha.setName(captchaDto.getCaptchaName());
+        captcha.setCategory(captchaDto.getCaptchaCategory());
+        captcha.setStatus(true);
+        captchaService.save(captcha);
+
+
+        if (!Objects.equals(trueImages[0].getOriginalFilename(), "")) {
+            int i = 0;
+            for (MultipartFile aFile : trueImages) {
+                i++;
+                System.out.println("Saving file: " + aFile.getOriginalFilename());
+
+                ImageWrapper trueImage = new ImageWrapper();
+                trueImage.setName("file" + i);
+                trueImage.setData(aFile.getBytes());
+                trueImage.setCaptcha(captcha);
+                trueImage.setValid(true);
+                imageService.save(trueImage);
+            }
+        }
+
+        if (!Objects.equals(falseImages[0].getOriginalFilename(), "")) {
+            int i = 0;
+            for (MultipartFile aFile : falseImages) {
+                i++;
+                System.out.println("Saving file: " + aFile.getOriginalFilename());
+
+                ImageWrapper falseImage = new ImageWrapper();
+                falseImage.setName("file" + i);
+                falseImage.setData(aFile.getBytes());
+                falseImage.setCaptcha(captcha);
+                falseImage.setValid(false);
+                imageService.save(falseImage);
+            }
+        }
+        return "redirect:/admin/list";
     }
 
 
@@ -158,17 +154,22 @@ public class AdminController {
 
     }
 
-
     @DeleteMapping("/delete/{captchaId}")
     @ResponseBody
     public GeneralResponse delete(@PathVariable long captchaId, HttpSession httpSession) {
-        GeneralResponse generalResponse = new GeneralResponse();
-        generalResponse = captchaService.delete(captchaId);
-        return generalResponse;
+        return captchaService.delete(captchaId);
     }
 
     @PostMapping("cache/refresh")
-    public void cacheRefresh(){
-        CommonUtils.setCaptchaIds(captchaService.findAllCaptchaIds());
+    @ResponseBody
+    public GeneralResponse cacheRefresh(){
+        GeneralResponse generalResponse = GeneralResponse.builder().message(Constants.success).result(0).build();
+        try {
+            CommonUtils.setCaptchaIds(captchaService.findAllCaptchaIds());
+        } catch (Exception ex){
+            generalResponse.setMessage(Constants.err);
+            generalResponse.setResult(1);
+        }
+        return generalResponse;
     }
 }

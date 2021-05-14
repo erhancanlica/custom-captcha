@@ -48,7 +48,7 @@ public class CaptchaServiceImpl implements CaptchaService {
                     .captchaId(captcha.getId())
                     .captchaName(captcha.getName())
                     .imageWrapper(dtos)
-                    .status(dtos.size()== 6)
+                    .status(dtos.size()== 9)
                     .build();
         }).collect(Collectors.toList());
 

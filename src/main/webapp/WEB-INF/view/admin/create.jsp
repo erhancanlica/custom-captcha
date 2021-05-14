@@ -102,20 +102,26 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+
                         <form:form action="create"  method="post"  enctype="multipart/form-data">
                             <div class="card-body">
+                                <c:if test="${not empty lengthErr}">
+                                    <div class="alert alert-danger">
+                                        <span>${lengthErr}</span>
+                                    </div>
+                                </c:if>
                                 <div class="row m-auto">
                                     <div class="col-12">
                                         <div class="form-group">
                                             <form:label  class="control-label col-form-label" path="captchaName">Captcha Ismi</form:label>
-                                            <form:input type="text" class="form-control" name="captchaName" placeholder="Captcha ismi giriniz" path="captchaName"/>
+                                            <form:input type="text" class="form-control" name="captchaName" placeholder="Captcha ismi giriniz" path="captchaName" required="required"/>
                                             <form:errors path="captchaName" cssClass="error" />
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
                                             <form:label class="control-label col-form-label" path="captchaCategory">Kategori</form:label>
-                                            <form:input type="text" class="form-control" name="captchaCategory" placeholder="Kategori giriniz" path="captchaCategory" />
+                                            <form:input type="text" class="form-control" name="captchaCategory" placeholder="Kategori giriniz" path="captchaCategory" required="required" />
                                             <form:errors path="captchaCategory" cssClass="error" />
                                         </div>
                                     </div>
@@ -191,7 +197,7 @@
 <div class="chat-windows"></div>
 <!-- ============================================================== -->
 
-
+    <script src="/resources/js/cacheRefresh.js"></script>
 </body>
 
 </html>

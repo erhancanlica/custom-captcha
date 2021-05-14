@@ -99,13 +99,13 @@
                                                         <span>Aktif</span>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <span>(Pasif) 6 fotoğraf bulunmalı</span>
+                                                        <span>(Pasif) 9 fotoğraf bulunmalı</span>
                                                     </c:otherwise>
                                                 </c:choose>
                                                 </td>
                                                 <td>
                                                     <a class="update" data-id="${capt.captchaId}">
-                                                        <i class="fas fa-trash-alt" data-toggle="tooltip"
+                                                        <i class="fas fa-search" data-toggle="tooltip"
                                                            data-placement="bottom" title="Göster"></i>
                                                     </a>
                                                 </td>
@@ -224,6 +224,7 @@
 
             });
         </script>
+        <script src="/resources/js/cacheRefresh.js"></script>
 </body>
 </html>
 
