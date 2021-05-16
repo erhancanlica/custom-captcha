@@ -38,16 +38,13 @@ public class CaptchaDaoImpl implements CaptchaDao {
     @Override
     public Captcha findById(Long id) {
         Session session = sessionFactory.getCurrentSession();
-        Captcha captcha = null;
-
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Captcha> criteriaQuery = criteriaBuilder.createQuery(Captcha.class);
         Root<Captcha> root = criteriaQuery.from(Captcha.class);
         Predicate predicateId = criteriaBuilder.equal(root.get("id"), id);
         criteriaQuery.select(root).where(predicateId);
         Query<Captcha> captchaQuery = session.createQuery(criteriaQuery);
-        captcha = captchaQuery.getSingleResult();
-
+        Captcha captcha = captchaQuery.getSingleResult();
         return captcha;
     }
 

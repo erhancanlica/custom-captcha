@@ -25,9 +25,6 @@ public class UserSecurityConfig  extends WebSecurityConfigurerAdapter {
     private UserDetailsService customUserDetailsService;
 
     @Autowired
-    private CustomSuccessHandler customSuccessHandler;
-
-    @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
@@ -41,6 +38,7 @@ public class UserSecurityConfig  extends WebSecurityConfigurerAdapter {
     public AuthenticationManager customAuthenticationManager() throws Exception {
         return authenticationManager();
     }
+
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -51,7 +49,6 @@ public class UserSecurityConfig  extends WebSecurityConfigurerAdapter {
                 .loginPage("/loginUser")
                 .loginProcessingUrl("/userLogin")
                 .permitAll()
-                .successHandler(customSuccessHandler)
                 .failureUrl("/loginUser?error=true")
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/user/logout")).logoutSuccessUrl("/loginUser?logout=true").permitAll();
