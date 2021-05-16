@@ -39,7 +39,6 @@ public class AdminController {
         final ModelAndView modelAndView = new ModelAndView("admin/list");
         List<CaptchaDto> captchaDtos = captchaService.findAll();
         modelAndView.addObject("captchas", captchaDtos);
-        modelAndView.addObject("captcha", new CaptchaDto());
         return modelAndView;
     }
 
@@ -54,10 +53,8 @@ public class AdminController {
 
 
     @PostMapping("/create")
-    public String save(HttpServletRequest request,
-                       @Valid @ModelAttribute CaptchaDto captchaDto, @RequestParam("trueImages") MultipartFile[] trueImages,
-                       @RequestParam("falseImages") MultipartFile[] falseImages,
-                       BindingResult bindingResult) throws Exception {
+    public String save(@ModelAttribute CaptchaDto captchaDto, @RequestParam("trueImages") MultipartFile[] trueImages,
+                       @RequestParam("falseImages") MultipartFile[] falseImages) throws Exception {
 
         if (captchaDto.getCaptchaName().equals("") || captchaDto.getCaptchaCategory().equals("")) {
             return "redirect:/admin/create";
@@ -114,7 +111,6 @@ public class AdminController {
         modelAndView.addObject("captcha", captchaDto);
         return modelAndView;
     }
-
 
     @PutMapping("/merge")
     @ResponseBody

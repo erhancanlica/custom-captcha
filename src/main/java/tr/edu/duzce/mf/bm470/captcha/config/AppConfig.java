@@ -46,6 +46,7 @@ public class AppConfig {
         properties.put(C3P0_ACQUIRE_INCREMENT, environment.getProperty("hibernate.c3p0.acquire_increment"));
         properties.put(C3P0_TIMEOUT, environment.getProperty("hibernate.c3p0.timeout"));
         properties.put(C3P0_MAX_STATEMENTS, environment.getProperty("hibernate.c3p0.max_statements"));
+        properties.put(C3P0_IDLE_TEST_PERIOD, environment.getProperty("hibernate.c3p0.idle_test_period"));
         properties.put(C3P0_CONFIG_PREFIX + ".initialPoolSize", environment.getProperty("hibernate.c3p0.initialPoolSize"));
 
         factoryBean.setHibernateProperties(properties);
