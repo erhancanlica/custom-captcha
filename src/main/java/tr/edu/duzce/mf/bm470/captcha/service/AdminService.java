@@ -11,7 +11,5 @@ import java.util.List;
 
 public interface AdminService {
 
-    List<Users> getByUsers();
-
     Admins findByUser(Users user);
 }

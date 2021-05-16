@@ -22,17 +22,6 @@ public class AdminDaoImpl implements AdminDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-//TODO: UserDaoya taşı
-    public List<Users> getByUsers() {
-        Session session = sessionFactory.getCurrentSession();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Users> criteriaQuery = criteriaBuilder.createQuery(Users.class);
-        Root<Users> root = criteriaQuery.from(Users.class);
-        criteriaQuery.select(root);
-        Query<Users> query = session.createQuery(criteriaQuery);
-        return query.getResultList();
-    }
-
     @Override
     public Admins findByUser(Users user) {
         Session session = sessionFactory.getCurrentSession();

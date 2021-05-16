@@ -18,10 +18,6 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private AdminDao adminDao;
 
-    public List<Users> getByUsers() {
-        List<Users> users = adminDao.getByUsers();
-        return users;
-    }
 
     @Override
     public Admins findByUser(Users user) {

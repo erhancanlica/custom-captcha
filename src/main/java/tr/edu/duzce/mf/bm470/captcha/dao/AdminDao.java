@@ -8,6 +8,4 @@ import java.util.List;
 public interface AdminDao {
 
     Admins findByUser(Users user);
-
-    List<Users> getByUsers();
 }
