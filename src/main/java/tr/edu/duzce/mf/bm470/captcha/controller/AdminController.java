@@ -37,13 +37,6 @@ public class AdminController {
     @Autowired
     private CaptchaService captchaService;
 
-    @GetMapping
-    public ModelAndView index() {
-        ModelAndView modelAndView = new ModelAndView("admin/index");
-        return modelAndView;
-    }
-
-
     @GetMapping("/list")
     public ModelAndView getByUsers(final Model model) {
         final ModelAndView modelAndView = new ModelAndView("admin/list");
