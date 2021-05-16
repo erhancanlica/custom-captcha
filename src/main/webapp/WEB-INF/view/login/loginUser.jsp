@@ -25,7 +25,7 @@
             width: 128px;height: 128px;
             overflow: hidden;
             display: inline-block;}
-        .selected-image{border-style: solid;border-color: green; }
+        .selected-image{border-style: solid;border-color: purple; border-width: 5px}
         a{cursor: pointer}
 
         .hidden{
