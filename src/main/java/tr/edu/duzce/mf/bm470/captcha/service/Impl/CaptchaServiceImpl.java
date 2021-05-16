@@ -1,5 +1,6 @@
 package tr.edu.duzce.mf.bm470.captcha.service.Impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,6 @@ import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
-import tr.edu.duzce.mf.bm470.captcha.utils.CommonUtils;
 import tr.edu.duzce.mf.bm470.captcha.utils.ImageUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Transactional
 @Service
 public class CaptchaServiceImpl implements CaptchaService {
@@ -86,8 +87,13 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public CaptchaDto getCaptcha() {
+        long startTime = System.currentTimeMillis();
         Random rand = new Random();
-        CaptchaDto captchaDto = findById(CommonUtils.getCaptchaIds().get(rand.nextInt(CommonUtils.getCaptchaIds().size())));
+        List<Long> captchaIds = findAllCaptchaIds();
+        CaptchaDto captchaDto = findById(captchaIds.get(rand.nextInt(captchaIds.size())));
+        long endTime = System.currentTimeMillis();
+        long duration = (endTime - startTime);
+        log.info("calisma süresi : {}",duration);
         return captchaDto;
     }
 

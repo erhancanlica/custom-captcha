@@ -9,7 +9,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
 import tr.edu.duzce.mf.bm470.captcha.model.Captcha;
 import tr.edu.duzce.mf.bm470.captcha.model.ImageWrapper;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.CaptchaDto;
@@ -17,8 +16,6 @@ import tr.edu.duzce.mf.bm470.captcha.model.dto.GeneralResponse;
 import tr.edu.duzce.mf.bm470.captcha.model.dto.ImageWrapperDto;
 import tr.edu.duzce.mf.bm470.captcha.service.CaptchaService;
 import tr.edu.duzce.mf.bm470.captcha.service.ImageService;
-import tr.edu.duzce.mf.bm470.captcha.utils.CommonUtils;
-import tr.edu.duzce.mf.bm470.captcha.utils.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -151,18 +148,5 @@ public class AdminController {
     @ResponseBody
     public GeneralResponse delete(@PathVariable long captchaId, HttpSession httpSession) {
         return captchaService.delete(captchaId);
-    }
-
-    @PostMapping("cache/refresh")
-    @ResponseBody
-    public GeneralResponse cacheRefresh(){
-        GeneralResponse generalResponse = GeneralResponse.builder().message(Constants.success).result(0).build();
-        try {
-            CommonUtils.setCaptchaIds(captchaService.findAllCaptchaIds());
-        } catch (Exception ex){
-            generalResponse.setMessage(Constants.err);
-            generalResponse.setResult(1);
-        }
-        return generalResponse;
     }
 }

@@ -224,7 +224,6 @@
 
             });
         </script>
-        <script src="/resources/js/cacheRefresh.js"></script>
 </body>
 </html>
 

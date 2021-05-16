@@ -196,8 +196,6 @@
 
 <div class="chat-windows"></div>
 <!-- ============================================================== -->
-
-    <script src="/resources/js/cacheRefresh.js"></script>
 </body>
 
 </html>
