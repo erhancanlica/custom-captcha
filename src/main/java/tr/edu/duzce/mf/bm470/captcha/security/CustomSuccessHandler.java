@@ -45,28 +45,17 @@ public class CustomSuccessHandler extends SavedRequestAwareAuthenticationSuccess
         final List<String> roles = new ArrayList<>();
         authorities.forEach(grantedAuthority -> roles.add(grantedAuthority.getAuthority()));
         final Users dbUser = userService.findByUserName(user.getUsername());
-        if (isClient(roles)) {
-            targetUrl = authenticateClient(request, dbUser);
-        }
         if (isAdmin(roles)) {
             targetUrl = authenticateAdmin(request, dbUser);
         }
         redirectStrategy.sendRedirect(request, response, targetUrl);
     }
 
-    public String authenticateClient(HttpServletRequest request, Users dbUser) {
-        //TODO: clientı al sessiona yaz
-        return "/";
-    }
 
     public String authenticateAdmin(HttpServletRequest request, Users dbUser) {
         final Admins admin = adminService.findByUser(dbUser);
         request.getSession().setAttribute(Constants.userInfoKey, admin);
         return "/admin/list";
-    }
-
-    public boolean isClient(List<String> roles) {
-        return roles.contains("ROLE_CLIENT");
     }
 
     public boolean isAdmin(List<String> roles) {
